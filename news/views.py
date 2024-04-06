@@ -35,10 +35,14 @@ def scrape(request):
         news_items = data_dict.get("rss").get("channel").get("item")
         for news in news_items:
             title = news["title"]
+
+            # Get Description Text
             desc = news["description"]
+            soup_desc = BSoup(desc, 'html.parser')
+            desc = soup_desc.get_text()
+
             url = news["link"]
             pub_date = news["pubDate"]
-            # print("---------daet---------",pub_date)
             pub_date_format = datetime.strptime(pub_date, "%a, %d %b %Y %H:%M:%S %z")
             categories = news['category']
 
@@ -55,10 +59,6 @@ def scrape(request):
             if news_obj.exists()==False:
                 head_line_obj = Headline(title=title, description=desc, url=url, image=img_src, pub_date=pub_date_format)
                 head_line_obj.save()
-                # if img_src:
-                #     Headline.objects.create()
-                # else:
-                #     Headline.objects.create(title=title, description=desc, url=url, pub_date=pub_date_format)
                 
                 for category in categories:
                     category, created = newsCategory.objects.get_or_create(category_name=category)
@@ -67,12 +67,9 @@ def scrape(request):
                 head_line_obj.save()
 
             else:
-                pass
-
-                
+                pass 
     
-
-    return redirect("break")
+    return redirect("home")
 
 
 def news_list(request):
@@ -88,46 +85,35 @@ def news_list(request):
 
 
 def index(request):
-    news = Headline.objects.all()
     random_three = Headline.objects.order_by('?')[:3]
     random_twelve = Headline.objects.order_by('?')[:12]
 
-    head = Headline.objects.first()
-    clean_text = "Nothing"
-    if head:
-        try:
-            soup = BSoup(head.description, 'html.parser')
-            clean_text = soup.get_text()
-        except Exception as e:
-            # Log the error or handle it in another way
-            pass
+    first_news = Headline.objects.first()
+    clean_text = "No Data. Please run Fetch News"
+    if first_news:
+        clean_text = first_news.description
 
     context = {
-        'head': head,
+        'head': first_news,
         'random_three': random_three,
         'random_twelve': random_twelve,
-        'clean_text': clean_text
+        'clean_text': clean_text,
+        'date': datetime.now()
     }
     return render(request, 'news/index.html', context)
 
 
 def userp(request):
-    news = Headline.objects.all()
     random_three = Headline.objects.order_by('?')[:3]
     random_twelve = Headline.objects.order_by('?')[:12]
 
-    head = Headline.objects.first()
+    first_news = Headline.objects.first()
     clean_text = "Nothing"
-    if head:
-        try:
-            soup = BSoup(head.description, 'html.parser')
-            clean_text = soup.get_text()
-        except Exception as e:
-            # Log the error or handle it in another way
-            pass
-
+    if first_news:
+        clean_text = first_news.description
+    
     context = {
-        'head': head,
+        'head': first_news,
         'random_three': random_three,
         'random_twelve': random_twelve,
         'clean_text': clean_text
@@ -164,13 +150,13 @@ def user_register(request):
         last_name = request.POST['last_name']
         
         if CustomUser.objects.filter(username=username).exists():
-            return render(request, 'news/register.html', {'error': 'Username is already taken'})
+            return render(request, 'news/register.html', {'error': 'Username is already taken', 'date': datetime.now()})
         else:
             user = CustomUser.objects.create_user(username=username, password=password, first_name=first_name, last_name=last_name)
             auth.login(request, user)
             return redirect('/')
     else:
-        return render(request, 'news/register.html', {'error':''})
+        return render(request, 'news/register.html', {'date': datetime.now()})
 
 
 def login(request):
@@ -184,9 +170,9 @@ def login(request):
             auth.login(request, user)
             return redirect('userprofile')
         else:
-            return render(request, 'news/login.html', {'error': 'Invalid credentials'})
+            return render(request, 'news/login.html', {'error': 'Invalid credentials', 'date': datetime.now()})
     else:
-        return render(request, 'news/login.html')
+        return render(request, 'news/login.html', {'date': datetime.now()})
 
 def logout(request):
     auth.logout(request)
