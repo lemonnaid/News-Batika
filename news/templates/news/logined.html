@@ -40,8 +40,7 @@
               ></a>
             </div>
             <div class="site-button">
-              <a href="{% url "login" %}" role="button" class="login-btn" >LOGIN</a>
-              <a href="{% url "user_register" %}" role="button" class="subscribe-btn">REGISTER</a>
+              <a href="{% url 'break'%}" role="button" class="login-btn" >LOGOUT</a>
               <a href="{% url 'scrape' %}" role="button" class="subscribe-btn">FETCH NEWS</a>
             </div>
           </div>
@@ -53,7 +52,7 @@
           <div class="main-nav-links">
             <ul class="nav justify-content-center">
               <li class="nav-item dropdown">
-                <a class="nav-link" href="{% url 'break' %}" role="button"  aria-expanded="false"> HOME </a>
+                <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> HOME </a>
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">TEXT CONVERTER</a>
@@ -87,9 +86,34 @@
               <div class="section-title">
                 <h2>Latest News</h2>
                 <div class="section-para">
-                  <a class="section-status" href="{% url "login" %}">Your Interest</a>
+                  <a class="section-status" data-bs-toggle="modal" data-bs-target="#exampleModal" href="{% url "user_register" %}">Your Interest</a>
                   <span class="material-symbols-outlined arrow move-right"> arrow_forward </span>
                 </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Choose Your Preferenced News</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form action="{% url 'save_preference' %}" method='POST'>
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                      {{ form.as_p }}
+                      {% comment %} <label for="message-text" class="col-form-label">Please Enter Your Preferenced News Tittle <span>*</span></label>
+                      <textarea class="form-control" id="PreferencedNews" name="PreferencedNews"></textarea> {% endcomment %}
+                    </div>
+                    <div class="modal-footer">
+                      <button  class="btn btn-primary" type='submit'>Save</button>
+                    </div>
+                  </form>
+                </div>
+                
               </div>
             </div>
           </div>
@@ -138,17 +162,15 @@
             {% for n in random_twelve %}
             <div class="col-md-3">
               <div class="card section-3-card-overlay">
-                <a class="section-3-card-overlay-tiltle" target="_blank" href="{{n.url}}">
                 <img src="{{n.image}}" class="card-img section-3-card-img-overlay" alt="..." />
                 <div class="card-img-overlay card-img-overlay-section-3">
                   <h5 class="card-title">
-                    {{n.title}}
+                    <a class="section-3-card-overlay-tiltle" target="_blank" href="{{n.url}}">{{n.title}}</a>
                   </h5>
                   <p class="card-text">
                     <small class="text-muted-overlay">{{n.pub_date|date:"d F, Y"}}</small>
                   </p>
                 </div>
-              </a>
               </div>
             </div>
             {% endfor %}
@@ -159,11 +181,10 @@
       <footer class="section-6">
         <div class="container footer-container">
           <div class="row">
+            
             <div class="col-md-4 footer-column">
               <h5 class="footer-title">ABOUT US</h5>
-              <p class="footer-para">News aggregator system plays a crucial role in assisting users to stay updated with the
-                latest news across various topics and sources in today&#39;s rapidly evolving digital landscape.
-                </p>
+              <p class="footer-para">We're a media company. We promise to tell you what's new in the parts of modern life that matter. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo. Sed consequat, leo eget bibendum sodales, augue velit.</p>
               <div class="site-social-icons">
                 <div class="footer-social-handles">
                   <a class="footer-nav-icon" href="#"
@@ -184,7 +205,7 @@
                 </div>
               </div>
             </div>
-           
+          
               </div>
             </div>
             

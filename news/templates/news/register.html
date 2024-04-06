@@ -18,7 +18,7 @@
         <!-- Heading -->
         <div class="container top-nav">
             <div class="site-logo">
-                <h1>डेली नीव्स</h1>
+                <a class="nav-link" href="{% url 'break' %}" role="button"  aria-expanded="false"><h1>News Batika</h1></a>
             </div>
 
             <div class="site-social-icons">
@@ -28,8 +28,8 @@
                     <a class="top-nav-icon" href="#"><div><i class="fab fa-youtube"></i></div></a>
                 </div>
                 <div class="site-button">
-                    <a href="./login.html" role="button" class="login-btn">LOGIN</a>
-                    <a href="./register.html" role="button" class="subscribe-btn">REGISTER</a>
+                    <a href="{% url "login" %}" role="button" class="login-btn">LOGIN</a>
+                   
                 </div>
             </div>
         </div>
@@ -44,15 +44,16 @@
                             <h3 class="register-heading">Register New Account</h3>
                             <p>Please fill in the form below to register.</p>
                         </div>
-                        <form class="login_form" role="form" action="" method="POST">
+                        <form class="login_form" role="form" action="{% url 'user_register' %}" method="POST">
+                            {% csrf_token %}
                             <div class="row">
                                 <div class="col form-group">
                                     <label for="firstname" class="form-label login-form-label">First Name<span>*</span></label>
-                                    <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Enter your First name" aria-label="First name" />
+                                    <input type="text" class="form-control" id="firstname" name="first_name" placeholder="Enter your First name" aria-label="First name" />
                                 </div>
                                 <div class="col form-group">
                                     <label for="lastname" class="form-label login-form-label">Last Name<span>*</span></label>
-                                    <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Enter your Last name" aria-label="Last name" />
+                                    <input type="text" class="form-control" id="lastname" name="last_name" placeholder="Enter your Last name" aria-label="Last name" />
                                 </div>
                             </div>
                             <div class="form-group">
@@ -60,19 +61,22 @@
                                 <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" aria-label="user name" />
                             </div>
                             <div class="form-group">
-                                <label for="password1" class="form-label login-form-label">Password<span>*</span></label>
-                                <input type="password" class="form-control" id="password1" name="password1" placeholder="Enter your Password" />
+                                <label for="password" class="form-label login-form-label">Password<span>*</span></label>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Enter your Password" />
                             </div>
                             <div class="form-group">
-                                <label for="password2" class="form-label login-form-label">Confirm Password<span>*</span></label>
-                                <input type="password" class="form-control" id="password2" name="password2" placeholder="Confirm your Password" />
+                                <label for="password_confirm" class="form-label login-form-label">Confirm Password<span>*</span></label>
+                                <input type="password" class="form-control" id="password_confirm" name="password_confirm" placeholder="Confirm your Password" />
                             </div>
+
                             <div class="button-div">
                                 <button type="submit" id="submit" class="btn btn-primary login-page-btn btn-lg" value="">Submit (पेश गर्नुहोस्)</button>
                             </div>
                         </form>
+                        
                         <div class="link mt-3">
-                            <a class="bck-to-login" href="./login.html">Back to Login (लगइनमा जानुहोस्)</a>
+                            <a class="bck-to-login" href="{% url 'login' %}">Back to Login (लगइनमा जानुहोस्)</a>
+                            <h2 style="color:red;">{{ error }}</h2>
                         </div>
                     </div>
                 </div>
