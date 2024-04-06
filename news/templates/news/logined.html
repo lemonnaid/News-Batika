@@ -40,7 +40,7 @@
               ></a>
             </div>
             <div class="site-button">
-              <a href="{% url 'break'%}" role="button" class="login-btn" >LOGOUT</a>
+              <a href="{% url 'home'%}" role="button" class="login-btn" >LOGOUT</a>
               <a href="{% url 'scrape' %}" role="button" class="subscribe-btn">FETCH NEWS</a>
             </div>
           </div>
@@ -95,21 +95,6 @@
                   <h1 class="modal-title fs-5" id="exampleModalLabel">Choose Your Preferenced News</h1>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                  <form action="{% url 'save_preference' %}" method='POST'>
-                    {% csrf_token %}
-
-                    <div class="mb-3">
-                      {{ form.as_p }}
-                      {% comment %} <label for="message-text" class="col-form-label">Please Enter Your Preferenced News Tittle <span>*</span></label>
-                      <textarea class="form-control" id="PreferencedNews" name="PreferencedNews"></textarea> {% endcomment %}
-                    </div>
-                    <div class="modal-footer">
-                      <button  class="btn btn-primary" type='submit'>Save</button>
-                    </div>
-                  </form>
-                </div>
-                
               </div>
             </div>
           </div>

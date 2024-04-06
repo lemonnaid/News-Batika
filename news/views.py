@@ -67,12 +67,9 @@ def scrape(request):
                 head_line_obj.save()
 
             else:
-                pass
-
-                
+                pass 
     
-
-    return redirect("break")
+    return redirect("home")
 
 
 def news_list(request):
@@ -100,7 +97,8 @@ def index(request):
         'head': first_news,
         'random_three': random_three,
         'random_twelve': random_twelve,
-        'clean_text': clean_text
+        'clean_text': clean_text,
+        'date': datetime.now()
     }
     return render(request, 'news/index.html', context)
 
@@ -152,13 +150,13 @@ def user_register(request):
         last_name = request.POST['last_name']
         
         if CustomUser.objects.filter(username=username).exists():
-            return render(request, 'news/register.html', {'error': 'Username is already taken'})
+            return render(request, 'news/register.html', {'error': 'Username is already taken', 'date': datetime.now()})
         else:
             user = CustomUser.objects.create_user(username=username, password=password, first_name=first_name, last_name=last_name)
             auth.login(request, user)
             return redirect('/')
     else:
-        return render(request, 'news/register.html', {'error':''})
+        return render(request, 'news/register.html', {'date': datetime.now()})
 
 
 def login(request):
@@ -172,9 +170,9 @@ def login(request):
             auth.login(request, user)
             return redirect('userprofile')
         else:
-            return render(request, 'news/login.html', {'error': 'Invalid credentials'})
+            return render(request, 'news/login.html', {'error': 'Invalid credentials', 'date': datetime.now()})
     else:
-        return render(request, 'news/login.html')
+        return render(request, 'news/login.html', {'date': datetime.now()})
 
 def logout(request):
     auth.logout(request)
