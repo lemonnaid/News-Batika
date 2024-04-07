@@ -58,6 +58,7 @@ function compare_passwords() {
 
   if (password != confirmPassword) {
     alert("Password do not match");
+    document.getElementById("password_confirm").focus();
     return false;
   }
   return true;
