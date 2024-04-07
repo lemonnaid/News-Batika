@@ -1,25 +1,17 @@
-import requests
-import xmltodict
-from django.contrib.auth import logout
-
-# import nltk
 from datetime import datetime
-from random import sample
-
-from django.shortcuts import render
-from django.shortcuts import render, redirect
-
-from .cosine_similarity import calculate_similarity_with_models
-from django.shortcuts import render
-from django.http import JsonResponse, HttpResponse
-from news import utils
-
-# from nltk.tokenize import word_tokenize
-from bs4 import BeautifulSoup as BSoup
-
-from news.models import Headline, CustomUser
 
 from django.contrib import auth
+from django.contrib.auth import logout
+from django.http import HttpResponse
+from django.http import JsonResponse
+from django.shortcuts import redirect
+from django.shortcuts import render
+
+from news import utils
+from news.models import CustomUser
+from news.models import Headline
+# import nltk
+# from nltk.tokenize import word_tokenize
 
 
 def scrape(request):
@@ -27,7 +19,7 @@ def scrape(request):
     return redirect("home")
 
 
-def index(request):    
+def index(request):
     random_three = Headline.objects.order_by("?")[:3]
     latest_all_news = Headline.objects.order_by("-id")
     latest_news = Headline.objects.order_by("-id").first()
@@ -42,7 +34,7 @@ def index(request):
         "latest_all_news": latest_all_news,
         "clean_text": clean_text,
         "date": datetime.now(),
-        "authenticated": request.user.is_authenticated
+        "authenticated": request.user.is_authenticated,
     }
 
     return render(request, "news/index.html", context)
@@ -98,7 +90,7 @@ def user_login(request):
 def user_logout(request):
     if request.user.is_authenticated:
         logout(request)
-    
+
     return redirect("home")
 
 
