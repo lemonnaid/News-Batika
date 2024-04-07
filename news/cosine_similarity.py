@@ -1,14 +1,14 @@
-from django.db import models
+import re
+
+import nltk
 from django.http import HttpResponse
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
 
-# from .models import Headline
-import re
 from .models import Headline
-import nltk
+# from .models import Headline
 
 # Download NLTK data packages if not already downloaded
 nltk.download("punkt")
