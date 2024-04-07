@@ -9,13 +9,16 @@ from django.shortcuts import render, redirect
 from .forms import NewsCatrgoryForm
 from .cosine_similarity import calculate_similarity_with_models
 from django.shortcuts import render
+from django.http import JsonResponse, HttpResponse
+from news import utils
 
 # from nltk.tokenize import word_tokenize
 from bs4 import BeautifulSoup as BSoup
 
-from news.models import Headline,intrest,CustomUser, newsCategory
+from news.models import Headline,CustomUser, newsCategory
 
 from django.contrib import auth
+
 
 def scrape(request):
 
@@ -129,16 +132,6 @@ def base(request):
 def save_preference(request):
     form = NewsCatrgoryForm()
     return render(request, 'news/logined.html', {'form': form})
-    # if request.method == 'POST':
-    #     form = NewsCatrgoryForm(request.POST)
-    #     if form.is_valid():
-    #         preference = form.cleaned_data.get('PreferencedNews')
-    #         preference = intrest(PreferencedNews=preference)
-    #         preference.save()
-    #         return redirect('userprofile')  # Redirect to the homepage or any other page
-    # else:
-    #     form = NewsCatrgoryForm()
-    # return render( request, 'news/logined.html', {'form':form})
         
 
 # register,login and logout using bultin django authication
@@ -177,3 +170,9 @@ def login(request):
 def logout(request):
     auth.logout(request)
     return redirect('/')
+
+def get_similar_news(request, news_id):
+    similar_news = utils.get_similar_news(news_id)
+    return HttpResponse(f'<h1>{similar_news}</h1>')
+    similar_news = ['news_1', 'news_2']
+    return JsonResponse(similar_news, safe=False)

@@ -7,5 +7,6 @@ urlpatterns = [
     path('register/',views.user_register,name='user_register'),
     path('login/',views.login,name='login'),
     path('userprofile/',views.userp,name='userprofile'),
-    # path('save_preference/', views.save_preference, name='save_preference'),
+    path('get_similar_news/<int:news_id>/', views.get_similar_news, name='get_similar_news')
+    # May need to add param
 ]
