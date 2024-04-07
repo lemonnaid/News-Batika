@@ -121,7 +121,10 @@ STATIC_URL = "static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiiles")
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 
-# AUTH_USER_MODEL = 'news.CustomUser'
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
+AUTH_USER_MODEL = 'news.CustomUser'
 
 
 # Default primary key field type

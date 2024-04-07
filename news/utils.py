@@ -1,7 +1,11 @@
+from datetime import datetime
+import requests
+import xmltodict
 from sklearn.preprocessing import normalize
 from sklearn.decomposition import NMF
 from sklearn.feature_extraction.text import TfidfVectorizer
 from .models import Headline
+from bs4 import BeautifulSoup as BSoup
 
 
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -51,3 +55,56 @@ def get_similar_news(news_id):
     <h2>Similarities</h2><p>{similarities}</p>
     <h2>Similarity index</h2><p>{similar_article_indices}</p>"""
     return f"Given Article: {article_titles[clicked_article_index]}<br><br>Recommended Article: {recommended_article}"
+
+
+def scrape_news():
+    feed_url_list = [
+        "https://english.onlinekhabar.com/feed/",
+        "https://enewspolar.com/feed/",
+        "https://techspecsnepal.com/feed/",
+    ]
+
+    for feed_url in feed_url_list:
+        response = requests.get(feed_url)
+        content = response.content
+        data_dict = xmltodict.parse(content)
+
+        news_items = data_dict.get("rss").get("channel").get("item")
+        for news in news_items:
+            title = news["title"].strip('\'"`')
+
+            # Get Description Text
+            desc = news["description"].strip('\'"`')
+            soup_desc = BSoup(desc, "html.parser")
+            desc = soup_desc.get_text()
+            news_source = (
+                feed_url.replace("https://", "")
+                .replace(".com/feed/", "")
+                .replace("english.", "")
+            )
+
+            url = news["link"]
+            pub_date = news["pubDate"]
+            pub_date_format = datetime.strptime(pub_date, "%a, %d %b %Y %H:%M:%S %z")
+
+            try:
+                content = news["content:encoded"]
+                # Extracting the image path
+                soup = BSoup(content, "html.parser")
+                img_tag = soup.find("img")
+                img_src = img_tag.get("src")
+
+            except:
+                img_src = None
+
+            news_obj = Headline.objects.filter(title=title)
+            if news_obj.exists() == False:
+                head_line_obj = Headline(
+                    title=title,
+                    description=desc,
+                    url=url,
+                    image=img_src,
+                    pub_date=pub_date_format,
+                    news_source=news_source,
+                )
+                head_line_obj.save()

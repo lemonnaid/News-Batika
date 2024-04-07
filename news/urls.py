@@ -2,13 +2,12 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path("scrape/", views.scrape, name="scrape"),
     path("", views.index, name="home"),
-    path("register/", views.user_register, name="user_register"),
-    path("login/", views.login, name="login"),
-    path("userprofile/", views.userp, name="userprofile"),
+    path("register/", views.user_register, name="register"),
+    path("login/", views.user_login, name="login"),
+    path("logout/", views.user_logout, name="logout"),
+    path("scrape/", views.scrape, name="scrape"),
     path(
         "similar_news/<int:news_id>/", views.get_similar_news, name="get_similar_news"
     ),
-    # May need to add param
 ]

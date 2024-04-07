@@ -63,6 +63,10 @@ body {
   justify-content: space-between;
   align-items: center;
 }
+.logined-site-button {
+  justify-content: center !important;
+}
+
 .login-btn {
   width: 100px;
   color: black;
@@ -183,7 +187,7 @@ body {
   overflow: hidden;
 }
 .hero-card-body {
-  background-color: #f5f5f5;
+  background-color: #e8e8e8;
 }
 .hero-card-image {
   border-radius: 0px !important;
@@ -250,11 +254,16 @@ body {
 }
 .hori-card {
   border: none !important;
+  height: 149px;
+}
+.hori-card-row {
+  height: 100%;
 }
 .hori-card-img {
   border-radius: 0px !important;
   object-fit: cover;
   transition: all 0.1s ease-in-out;
+  height: 100%;
 }
 .hori-card-img:hover {
   opacity: 0.8;
@@ -263,7 +272,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: #f5f5f5;
+  background-color: #e8e8e8;
   height: 100%;
 }
 
@@ -315,8 +324,9 @@ body {
 }
 
 .text-muted-overlay {
-  font-size: 12px;
+  font-size: 10px;
   color: #ffffff !important;
+  font-weight: 100;
 }
 .section-2-card {
   border: none !important;
@@ -401,7 +411,14 @@ body {
   opacity: 0.8;
 }
 .section-3-hero-card-title {
-  font-size: 20px;
+  font-size: 22px;
+}
+.section-3-hero-card-title a {
+  text-decoration: none;
+}
+.hero-news-heading {
+  color: black;
+  font-weight: 600;
 }
 .section-3-hero-card-para {
   color: #5d5d5d;
@@ -418,6 +435,7 @@ body {
   border: none !important;
   border-radius: 0px !important;
   overflow: hidden;
+  margin-bottom: 30px;
 }
 
 .section-3-card-img-overlay {
@@ -436,16 +454,27 @@ body {
 }
 
 .card-img-overlay-section-3 {
-  top: 120px !important;
+  top: 136px !important;
+  padding: 0px 16px 0px 16px !important;
 }
 
 .section-3-card-overlay-tiltle {
   text-decoration: none;
   color: #ffffff;
+  font-weight: 200;
 }
-
+.news-heading {
+  font-size: 18px;
+  font-weight: 700 !important;
+}
 .section-3-card-overlay-tiltle:hover {
   color: #ffffff;
+}
+
+.read-more-link {
+  text-decoration: none;
+  font-size: 12px;
+  color: #dbdbdb;
 }
 
 /* /==================End of body-section-3===================/

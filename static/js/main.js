@@ -1,6 +1,5 @@
 function validate_form() {
-  if (validate_firstname() && validate_lastname && validate_username && validate_password() && compare_passwords()) {
-    alert("Form data validated.");
+  if (validate_firstname() && validate_lastname() && validate_username() && validate_password() && compare_passwords()) {
     return true;
   }
   return false;
@@ -24,7 +23,7 @@ function validate_lastname() {
 
   if (!ln_regex.test(last_name)) {
     alert("Lastname should have only alphabet separated by space");
-    document.getElementById("last_name").focus();
+    document.getElementById("lastname").focus();
     return false;
   }
   return true;
@@ -32,11 +31,11 @@ function validate_lastname() {
 
 function validate_username() {
   let user_name = document.getElementById("username").value;
-  let user_regex = /^[A-Za-z ]+$/;
+  let user_regex = /^[A-Za-z0-9]+$/;
 
   if (!user_regex.test(user_name)) {
     alert("Username should have only alphabet.");
-    document.getElementById("user_name").focus();
+    document.getElementById("username").focus();
     return false;
   }
   return true;
@@ -47,7 +46,7 @@ function validate_password() {
   password_regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[+=@#%$^*/-]).{8,}$/;
   if (!password_regex.test(user_password)) {
     alert("Password Policy failed. Password should have lowercase, uppercase, digit, special character and atleast 8 character long");
-    document.getElementById("user_password").focus();
+    document.getElementById("password").focus();
     return false;
   }
   return true;
