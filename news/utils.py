@@ -47,7 +47,7 @@ def get_similar_news(news_id):
     recommended_article = article_titles[similar_article_indices[0]]
     recommended_url = article_link[similar_article_indices[0]] 
  
-    return f"""<h1>Article Read:</h1><h2>{article_read}<a href='{article_url}' target="_blank">{article_url}</a></h2><br><br><h1>Article Recommend: </h1><h2>{recommended_article}<a href='{article_url}' target="_blank">{recommended_url}</a></h2><br><br>
+    return f"""<h1>Article Read:</h1><h2>{article_read}<a href='{article_url}' target="_blank">{article_url}</a></h2><br><br><h1>Article Recommend: </h1><h2>{recommended_article}<a href='{recommended_url}' target="_blank">{recommended_url}</a></h2><br><br>
     <h2>Similarities</h2><p>{similarities}</p>
     <h2>Similarity index</h2><p>{similar_article_indices}</p>"""
     return f"Given Article: {article_titles[clicked_article_index]}<br><br>Recommended Article: {recommended_article}"
