@@ -16,11 +16,13 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-6 mb-4">
             <div class="card section-3-hero-card">
-              <a href={{head.url}} target="_blank"><p class="card-text section-3-hero-card-para">{{head.title}}</p></a>
-              <img src="{{head.image}}" class="card-img-top section-3-hero-card-image" alt="..." />
+              <img src="{{head.image}}" class="card-img-top section-3-hero-card-image" alt="..." />              
               <div class="card-body hero-card-body section-3-hero-card-body">
+                <h5 class="card-title section-3-hero-card-title">
+                  <a href={{head.url}} target="_blank"><p class="card-text hero-news-heading">{{head.title}}</p></a>
+                </h5>
                 <p class="card-text">
                   <small class="text-muted">{{head.pub_date|date:"d F, Y"}}</small>
                 </p>
@@ -29,10 +31,10 @@
             </div>
           </div>
 
-          <div class="col-md-6">
+          <div class="col-md-6 mb-4">
             {% for n in random_three %}
             <div class="card hori-card mb-3">
-              <div class="row g-0">
+              <div class="row hori-card-row g-0">
                 <div class="col-md-8 right-hori-card">
                   <div class="card-body hori-card-body">
                     <h5 class="card-title">
@@ -61,9 +63,9 @@
               <img src="{{n.image}}" class="card-img section-3-card-img-overlay" alt="..." />
               <div class="card-img-overlay card-img-overlay-section-3">
                 <h5 class="card-title">
-                  {{n.title}}
+                  <a class="section-3-card-overlay-tiltle news-heading" target="_blank" href="{{ n.url }}">{{ n.title|truncatechars:40 }}</a>
                 </h5>
-               
+                <a class="section-3-card-overlay-tiltle" target="_blank" href="{{n.url}}">{{n.news_source}}</a>
                 <p class="card-text">
                   <small class="text-muted-overlay">{{n.pub_date|date:"d F, Y"}}</small>
                 </p>

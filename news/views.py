@@ -155,7 +155,7 @@ def user_register(request):
                 last_name=last_name,
             )
             auth.login(request, user)
-            return redirect("/")
+            return render(request, 'news/login.html', {'date': datetime.now()})
     else:
         return render(request, "news/register.html", {"date": datetime.now()})
 
