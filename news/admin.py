@@ -7,4 +7,4 @@ admin.site.register(CustomUser)
 
 @admin.register(Headline)
 class HeadlineAdmin(admin.ModelAdmin):
-    list_display = ['title', 'url']
+    list_display = ["title", "url"]

@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('news', '0003_delete_intrest_remove_headline_news_category_and_more'),
+        ("news", "0003_delete_intrest_remove_headline_news_category_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='headline',
-            name='news_source',
+            model_name="headline",
+            name="news_source",
             field=models.CharField(max_length=100, null=True),
         ),
     ]

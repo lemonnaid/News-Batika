@@ -4,20 +4,19 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('news', '0002_alter_headline_news_category'),
+        ("news", "0002_alter_headline_news_category"),
     ]
 
     operations = [
         migrations.DeleteModel(
-            name='intrest',
+            name="intrest",
         ),
         migrations.RemoveField(
-            model_name='headline',
-            name='news_category',
+            model_name="headline",
+            name="news_category",
         ),
         migrations.DeleteModel(
-            name='newsCategory',
+            name="newsCategory",
         ),
     ]

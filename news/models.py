@@ -2,21 +2,20 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
 
 
-
 class Headline(models.Model):
-  title = models.CharField(max_length=200)
-  image = models.URLField(null=True, blank=True)
-  description = models.TextField(null=True)
-  url = models.TextField()
-  pub_date = models.DateTimeField(blank=True, null=True)
-  news_source=models.CharField(max_length=100,null=True)   
+    title = models.CharField(max_length=200)
+    image = models.URLField(null=True, blank=True)
+    description = models.TextField(null=True)
+    url = models.TextField()
+    pub_date = models.DateTimeField(blank=True, null=True)
+    news_source = models.CharField(max_length=100, null=True)
 
-  def __str__(self):
-    return self.title
-  
+    def __str__(self):
+        return self.title
+
 
 # # class intrest(models.Model):
-#   PreferencedNews = models.CharField(max_length=250) 
+#   PreferencedNews = models.CharField(max_length=250)
 
 
 class CustomUser(AbstractUser):
@@ -25,7 +24,7 @@ class CustomUser(AbstractUser):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['username'], name='unique_username')
+            models.UniqueConstraint(fields=["username"], name="unique_username")
         ]
 
     def __str__(self):
@@ -33,15 +32,15 @@ class CustomUser(AbstractUser):
 
     groups = models.ManyToManyField(
         Group,
-        verbose_name=('groups'),
+        verbose_name=("groups"),
         blank=True,
-        related_name='custom_user_set',
-        related_query_name='user',
+        related_name="custom_user_set",
+        related_query_name="user",
     )
     user_permissions = models.ManyToManyField(
         Permission,
-        verbose_name=('user permissions'),
+        verbose_name=("user permissions"),
         blank=True,
-        related_name='custom_user_set',
-        related_query_name='user',
+        related_name="custom_user_set",
+        related_query_name="user",
     )
