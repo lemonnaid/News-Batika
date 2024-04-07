@@ -144,8 +144,13 @@
               <div class="card section-3-card-overlay">
                 <img src="{{n.image}}" class="card-img section-3-card-img-overlay" alt="..." />
                 <div class="card-img-overlay card-img-overlay-section-3">
-                  <h5 class="card-title">
-                    <a class="section-3-card-overlay-tiltle" target="_blank" href="{{n.url}}">{{n.title}}</a>
+                  <h5 class="card-title"><a class="section-3-card-overlay-tiltle" target="_blank" href="{{ n.url }}">{{ n.title }}</a>
+                    {% if n.title|length > 20 %}
+                        <a href="{{ n.url }}" class="read-more-link">Read more...</a>
+                    {% endif %}
+                    
+                  <a class="section-3-card-overlay-tiltle" target="_blank" href="{{n.url}}">{{n.news_source}}</a>
+
                   </h5>
                   <p class="card-text">
                     <small class="text-muted-overlay">{{n.pub_date|date:"d F, Y"}}</small>

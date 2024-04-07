@@ -6,14 +6,14 @@ from random import sample
 
 from django.shortcuts import render
 from django.shortcuts import render, redirect
-from .forms import NewsCatrgoryForm
+
 from .cosine_similarity import calculate_similarity_with_models
 from django.shortcuts import render
 
 # from nltk.tokenize import word_tokenize
 from bs4 import BeautifulSoup as BSoup
 
-from news.models import Headline,intrest,CustomUser, newsCategory
+from news.models import Headline,CustomUser
 
 from django.contrib import auth
 
@@ -24,7 +24,7 @@ def scrape(request):
         "https://english.onlinekhabar.com/feed/",
         "https://enewspolar.com/feed/",
         "https://techspecsnepal.com/feed/",
-        "https://www.prasashan.com/category/english/feed/",
+        
     ]
     
 
@@ -42,11 +42,12 @@ def scrape(request):
             desc = news["description"]
             soup_desc = BSoup(desc, 'html.parser')
             desc = soup_desc.get_text()
+            news_source = u.replace("https://", "").replace(".com/feed/", "").replace("english.", "")
 
             url = news["link"]
             pub_date = news["pubDate"]
             pub_date_format = datetime.strptime(pub_date, "%a, %d %b %Y %H:%M:%S %z")
-            categories = news['category']
+            
 
             try:
                 content = news["content:encoded"]
@@ -55,23 +56,15 @@ def scrape(request):
                 img_tag = soup.find('img')
                 img_src = img_tag.get('src')
 
-
             except:
                 img_src = None
 
             news_obj = Headline.objects.filter(title=title)
             if news_obj.exists()==False:
-                head_line_obj = Headline(title=title, description=desc, url=url, image=img_src, pub_date=pub_date_format)
+                head_line_obj = Headline(title=title, description=desc, url=url, image=img_src, pub_date=pub_date_format, news_source=news_source)
                 head_line_obj.save()
                 
-                for category in categories:
-                    category, created = newsCategory.objects.get_or_create(category_name=category)
-                    head_line_obj.news_category.add(category)
-
-                head_line_obj.save()
-
-            else:
-                pass 
+            
     
     return redirect("home")
 
@@ -109,7 +102,7 @@ def index(request):
 
 def userp(request):
     random_three = Headline.objects.order_by('?')[:3]
-    random_twelve = Headline.objects.order_by('?')[:12]
+    random_twelve = Headline.objects.order_by('?')
 
     first_news = Headline.objects.first()
     clean_text = "Nothing"
