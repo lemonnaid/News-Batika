@@ -1,5 +1,6 @@
 import requests
 import xmltodict
+from django.contrib.auth import logout
 
 # import nltk
 from datetime import datetime
@@ -72,7 +73,8 @@ def scrape(request):
                     news_source=news_source,
                 )
                 head_line_obj.save()
-
+    if request.user.is_authenticated:
+        return redirect("userprofile")
     return redirect("home")
 
 
@@ -88,6 +90,9 @@ def news_list(request):
 
 
 def index(request):
+    if request.user.is_authenticated:
+        logout(request) 
+    
     random_three = Headline.objects.order_by("?")[:3]
     random_twelve = Headline.objects.order_by("?")[:12]
 
@@ -126,11 +131,6 @@ def userp(request):
 
 def base(request):
     return render(request, "news/base.html")
-
-
-def save_preference(request):
-    form = NewsCatrgoryForm()
-    return render(request, "news/logined.html", {"form": form})
 
 
 # register,login and logout using bultin django authication
@@ -178,12 +178,6 @@ def login(request):
             )
     else:
         return render(request, "news/login.html", {"date": datetime.now()})
-
-
-def logout(request):
-    auth.logout(request)
-    return redirect("/")
-
 
 def get_similar_news(request, news_id):
     similar_news = utils.get_similar_news(news_id)
