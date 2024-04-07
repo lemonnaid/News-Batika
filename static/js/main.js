@@ -1,18 +1,65 @@
-
-
-const usernameInput = document.getElementById('username');
-const errorMessage = document.getElementById('error-message');
-
-function validateInput() {
-    const value = usernameInput.value.trim();
-    // Check if the input is empty or contains invalid characters
-    if (value === '' || !/^[a-zA-Z0-9]+$/.test(value)) {
-        errorMessage.textContent = 'Please enter a valid username.';
-        return false;
-    } else {
-        errorMessage.textContent = '';
-        return true;
-    }
+function validate_form() {
+  if (validate_firstname() && validate_lastname && validate_username && validate_password() && compare_passwords()) {
+    alert("Form data validated.");
+    return true;
+  }
+  return false;
 }
 
-usernameInput.addEventListener('blur', validateInput);
+function validate_firstname() {
+  let first_name = document.getElementById("firstname").value;
+  let fn_regex = /^[A-Za-z ]+$/;
+
+  if (!fn_regex.test(first_name)) {
+    alert("Firstname should have only alphabet");
+    document.getElementById("firstname").focus();
+    return false;
+  }
+  return true;
+}
+
+function validate_lastname() {
+  let last_name = document.getElementById("lastname").value;
+  let ln_regex = /^[A-Za-z ]+$/;
+
+  if (!ln_regex.test(last_name)) {
+    alert("Lastname should have only alphabet separated by space");
+    document.getElementById("last_name").focus();
+    return false;
+  }
+  return true;
+}
+
+function validate_username() {
+  let user_name = document.getElementById("username").value;
+  let user_regex = /^[A-Za-z ]+$/;
+
+  if (!user_regex.test(user_name)) {
+    alert("Username should have only alphabet.");
+    document.getElementById("user_name").focus();
+    return false;
+  }
+  return true;
+}
+
+function validate_password() {
+  let user_password = document.getElementById("password").value;
+  password_regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[+=@#%$^*/-]).{8,}$/;
+  if (!password_regex.test(user_password)) {
+    alert("Password Policy failed. Password should have lowercase, uppercase, digit, special character and atleast 8 character long");
+    document.getElementById("user_password").focus();
+    return false;
+  }
+  return true;
+}
+
+function compare_passwords() {
+  let password = document.getElementById("password").value;
+  let confirmPassword = document.getElementById("password_confirm").value;
+
+  if (password != confirmPassword) {
+    alert("Password do not match");
+    return false;
+  }
+  return true;
+}
