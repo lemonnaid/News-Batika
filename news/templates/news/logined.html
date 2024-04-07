@@ -20,7 +20,7 @@
         <!-- Heading -->
         <div class="container top-nav">
           <div class="site-logo">
-            <a class="site-url" href='{% url "home"%}'><h1>News Batika</h1></a>
+            <a class="site-url" href='{% url "userprofile" %}'><h1>News Batika</h1></a>
           </div>
 
           <div class="site-social-icons">
@@ -38,7 +38,7 @@
                 ><div><i class="fa-brands fa-youtube"></i></div
               ></a>
             </div>
-            <div class="site-button">
+            <div class="site-button logined-site-button">
               <a href="{% url 'home'%}" role="button" class="login-btn" >LOGOUT</a>
               <a href="{% url 'scrape' %}" role="button" class="subscribe-btn">FETCH NEWS</a>
             </div>
@@ -87,22 +87,14 @@
               </div>
             </div>
           </div>
-          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h1 class="modal-title fs-5" id="exampleModalLabel">Choose Your Preferenced News</h1>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-              </div>
-            </div>
-          </div>
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-6 mb-4">
               <div class="card section-3-hero-card">
-                <a href={{head.url}} target="_blank"><p class="card-text section-3-hero-card-para">{{head.title}}</p></a>
-                <img src="{{head.image}}" class="card-img-top section-3-hero-card-image" alt="..." />
+                <img src="{{head.image}}" class="card-img-top section-3-hero-card-image" alt="..." />              
                 <div class="card-body hero-card-body section-3-hero-card-body">
+                  <h5 class="card-title section-3-hero-card-title">
+                    <a href={{head.url}} target="_blank"><p class="card-text hero-news-heading">{{head.title}}</p></a>
+                  </h5>
                   <p class="card-text">
                     <small class="text-muted">{{head.pub_date|date:"d F, Y"}}</small>
                   </p>
@@ -111,10 +103,10 @@
               </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-6 mb-4">
               {% for n in random_three %}
               <div class="card hori-card mb-3">
-                <div class="row g-0">
+                <div class="row hori-card-row g-0">
                   <div class="col-md-8 right-hori-card">
                     <div class="card-body hori-card-body">
                       <h5 class="card-title">
@@ -139,20 +131,18 @@
             {% for n in random_twelve %}
             <div class="col-md-3">
               <div class="card section-3-card-overlay">
+                <a class="section-3-card-overlay-tiltle" target="_blank" href="{{n.url}}">
                 <img src="{{n.image}}" class="card-img section-3-card-img-overlay" alt="..." />
                 <div class="card-img-overlay card-img-overlay-section-3">
-                  <h5 class="card-title"><a class="section-3-card-overlay-tiltle" target="_blank" href="{{ n.url }}">{{ n.title }}</a>
-                    {% if n.title|length > 20 %}
-                        <a href="{{ n.url }}" class="read-more-link">Read more...</a>
-                    {% endif %}
-                    
-                  <a class="section-3-card-overlay-tiltle" target="_blank" href="{{n.url}}">{{n.news_source}}</a>
-
+                  <h5 class="card-title">
+                    <a class="section-3-card-overlay-tiltle news-heading" target="_blank" href="{{ n.url }}">{{ n.title|truncatechars:40 }}</a>
                   </h5>
+                  <a class="section-3-card-overlay-tiltle" target="_blank" href="{{n.url}}">{{n.news_source}}</a>
                   <p class="card-text">
                     <small class="text-muted-overlay">{{n.pub_date|date:"d F, Y"}}</small>
                   </p>
                 </div>
+              </a>
               </div>
             </div>
             {% endfor %}
