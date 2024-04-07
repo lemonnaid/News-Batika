@@ -128,10 +128,8 @@ def base(request):
     return render(request, "news/base.html")
 
 
-def save_preference(request):
-    form = NewsCatrgoryForm()
-    return render(request, "news/logined.html", {"form": form})
 
+        
 
 # register,login and logout using bultin django authication
 def user_register(request):

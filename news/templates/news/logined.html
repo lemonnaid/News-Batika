@@ -142,7 +142,7 @@
                 <img src="{{n.image}}" class="card-img section-3-card-img-overlay" alt="..." />
                 <div class="card-img-overlay card-img-overlay-section-3">
                   <h5 class="card-title"><a class="section-3-card-overlay-tiltle" target="_blank" href="{{ n.url }}">{{ n.title }}</a>
-                    {% if n.title|length > 20 %}
+                    {% if n.title|length > 6 %}
                         <a href="{{ n.url }}" class="read-more-link">Read more...</a>
                     {% endif %}
                     
