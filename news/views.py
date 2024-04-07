@@ -21,8 +21,8 @@ def scrape(request):
 
 def index(request):
     random_three = Headline.objects.order_by("?")[:3]
-    latest_all_news = Headline.objects.order_by("-id")
-    latest_news = Headline.objects.order_by("-id").first()
+    latest_all_news = Headline.objects.order_by("-pub_date")
+    latest_news = Headline.objects.order_by("-pub_date").first()
 
     clean_text = "No Data. Please Click Fetch News Above"
     if latest_news:
