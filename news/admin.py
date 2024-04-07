@@ -9,4 +9,4 @@ admin.site.register(CustomUser)
 
 @admin.register(Headline)
 class HeadlineAdmin(admin.ModelAdmin):
-    list_display = ["id", "title", "url"]
+    list_display = ["id", "title", "url", "news_source"]

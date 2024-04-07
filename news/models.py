@@ -16,10 +16,6 @@ class Headline(models.Model):
         return self.title
 
 
-# # class intrest(models.Model):
-#   PreferencedNews = models.CharField(max_length=250)
-
-
 class CustomUser(AbstractUser):
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
