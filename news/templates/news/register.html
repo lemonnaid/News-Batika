@@ -9,7 +9,7 @@
             <h3 class="register-heading">Register New Account</h3>
             <p>Please fill in the form below to register.</p>
           </div>
-          <form class="login_form" role="form" action="{% url 'user_register' %}" onsubmit="return validate_form()" method="POST">
+          <form class="login_form" role="form" action="{% url 'register' %}" onsubmit="return validate_form()" method="POST">
             {% csrf_token %}
             <div class="row">
               <div class="col form-group">

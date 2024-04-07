@@ -23,114 +23,29 @@ from django.contrib import auth
 
 
 def scrape(request):
-    urls = [
-        "https://english.onlinekhabar.com/feed/",
-        "https://enewspolar.com/feed/",
-        "https://techspecsnepal.com/feed/",
-    ]
-
-    for u in urls:
-        response = requests.get(u)
-        content = response.content
-        data_dict = xmltodict.parse(content)
-
-        news_items = data_dict.get("rss").get("channel").get("item")
-        for news in news_items:
-            title = news["title"]
-
-            # Get Description Text
-            desc = news["description"]
-            soup_desc = BSoup(desc, "html.parser")
-            desc = soup_desc.get_text()
-            news_source = (
-                u.replace("https://", "")
-                .replace(".com/feed/", "")
-                .replace("english.", "")
-            )
-
-            url = news["link"]
-            pub_date = news["pubDate"]
-            pub_date_format = datetime.strptime(pub_date, "%a, %d %b %Y %H:%M:%S %z")
-
-            try:
-                content = news["content:encoded"]
-                # Extracting the image path
-                soup = BSoup(content, "html.parser")
-                img_tag = soup.find("img")
-                img_src = img_tag.get("src")
-
-            except:
-                img_src = None
-
-            news_obj = Headline.objects.filter(title=title)
-            if news_obj.exists() == False:
-                head_line_obj = Headline(
-                    title=title,
-                    description=desc,
-                    url=url,
-                    image=img_src,
-                    pub_date=pub_date_format,
-                    news_source=news_source,
-                )
-                head_line_obj.save()
-    if request.user.is_authenticated:
-        return redirect("userprofile")
+    utils.scrape_news()
     return redirect("home")
 
 
-def news_list(request):
-    headlines = Headline.objects.all().order_by("-id")
-    query = request.GET.get("intreast")
-    if query:
-        headlines = calculate_similarity_with_models(query)
-    context = {
-        "object_list": headlines,
-    }
-    return render(request, "news/home.html", context)
-
-
-def index(request):
-    if request.user.is_authenticated:
-        logout(request) 
-    
+def index(request):    
     random_three = Headline.objects.order_by("?")[:3]
-    random_twelve = Headline.objects.order_by("?")[:12]
+    latest_all_news = Headline.objects.order_by("-id")
+    latest_news = Headline.objects.order_by("-id").first()
 
-    first_news = Headline.objects.first()
-    clean_text = "No Data. Please run Fetch News"
-    if first_news:
-        clean_text = first_news.description
+    clean_text = "No Data. Please Click Fetch News Above"
+    if latest_news:
+        clean_text = latest_news.description
 
     context = {
-        "head": first_news,
+        "head": latest_news,
         "random_three": random_three,
-        "random_twelve": random_twelve,
+        "latest_all_news": latest_all_news,
         "clean_text": clean_text,
         "date": datetime.now(),
+        "authenticated": request.user.is_authenticated
     }
+
     return render(request, "news/index.html", context)
-
-
-def userp(request):
-    random_three = Headline.objects.order_by("?")[:3]
-    random_twelve = Headline.objects.order_by("?")
-
-    first_news = Headline.objects.first()
-    clean_text = "Nothing"
-    if first_news:
-        clean_text = first_news.description
-
-    context = {
-        "head": first_news,
-        "random_three": random_three,
-        "random_twelve": random_twelve,
-        "clean_text": clean_text,
-    }
-    return render(request, "news/logined.html", context)
-
-
-def base(request):
-    return render(request, "news/base.html")
 
 
 # register,login and logout using bultin django authication
@@ -155,12 +70,12 @@ def user_register(request):
                 last_name=last_name,
             )
             auth.login(request, user)
-            return redirect("userprofile")
+            return redirect("home")
     else:
         return render(request, "news/register.html", {"date": datetime.now()})
 
 
-def login(request):
+def user_login(request):
     if request.method == "POST":
         username = request.POST["username"]
         password = request.POST["password"]
@@ -169,7 +84,7 @@ def login(request):
 
         if user is not None:
             auth.login(request, user)
-            return redirect("userprofile")
+            return redirect("home")
         else:
             return render(
                 request,
@@ -178,6 +93,14 @@ def login(request):
             )
     else:
         return render(request, "news/login.html", {"date": datetime.now()})
+
+
+def user_logout(request):
+    if request.user.is_authenticated:
+        logout(request)
+    
+    return redirect("home")
+
 
 def get_similar_news(request, news_id):
     similar_news = utils.get_similar_news(news_id)
