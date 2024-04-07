@@ -21,9 +21,12 @@ def get_similar_news(news_id):
     # Input and output data
     articles = Headline.objects.all()
     article_titles = [article.description for article in articles]
-    article_read = Headline.objects.get(id=news_id).description
+    article_link = [article.url for article in articles]
 
-    custom_stop_words = {"OnlineKhabar English News"}
+    article_read = Headline.objects.get(id=news_id).description
+    article_url = Headline.objects.get(id=news_id).url 
+
+    custom_stop_words = {'OnlineKhabar', 'English' ,'News','Enewspolar'}
     all_stop_words = custom_stop_words.union(sklearn_stop_words)
     tfidf_vectorizer = TfidfVectorizer(
         max_df=0.95, min_df=2, stop_words=list(all_stop_words)
@@ -46,7 +49,9 @@ def get_similar_news(news_id):
     similar_article_indices = similarities.flatten().argsort()
 
     recommended_article = article_titles[similar_article_indices[0]]
-    return f"""<h1>Article Read:</h1><h2>{article_read}</h2><br><br><h1>Article Recommend: </h1><h2>{recommended_article}</h2><br><br>
+    recommended_url = article_link[similar_article_indices[0]] 
+ 
+    return f"""<h1>Article Read:</h1><h2>{article_read}<a href='{article_url}' target="_blank">{article_url}</a></h2><br><br><h1>Article Recommend: </h1><h2>{recommended_article}<a href='{recommended_url}' target="_blank">{recommended_url}</a></h2><br><br>
     <h2>Similarities</h2><p>{similarities}</p>
     <h2>Similarity index</h2><p>{similar_article_indices}</p>"""
     return f"Given Article: {article_titles[clicked_article_index]}<br><br>Recommended Article: {recommended_article}"
