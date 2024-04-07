@@ -1,11 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
 
-class newsCategory(models.Model):
-   category_name = models.CharField(max_length=355, blank=False, null=False)
-
-   def __str__(self):
-      return self.category_name
 
 
 class Headline(models.Model):
@@ -14,14 +9,14 @@ class Headline(models.Model):
   description = models.TextField(null=True)
   url = models.TextField()
   pub_date = models.DateTimeField(blank=True, null=True)
-  news_category = models.ManyToManyField('newsCategory', blank=True)
+  news_source=models.CharField(max_length=100,null=True)   
 
   def __str__(self):
     return self.title
   
 
-class intrest(models.Model):
-  PreferencedNews = models.CharField(max_length=250) 
+# # class intrest(models.Model):
+#   PreferencedNews = models.CharField(max_length=250) 
 
 
 class CustomUser(AbstractUser):
