@@ -33,15 +33,13 @@
               <label for="password_confirm" class="form-label login-form-label">Confirm Password<span class="req-astric">*</span></label>
               <input type="password" class="form-control" id="password_confirm" name="password_confirm" placeholder="Confirm your Password" required />
             </div>
-
+            <h5 class="error-msg">{{ error }}</h5>
             <div class="button-div">
               <button type="submit" id="submit" class="btn btn-primary login-page-btn btn-lg" value="">Submit (पेश गर्नुहोस्)</button>
             </div>
           </form>
-
           <div class="link mt-3">
             <a class="bck-to-login" href="{% url 'login' %}">Back to Login (लगइनमा जानुहोस्)</a>
-            <h2 style="color: red">{{ error }}</h2>
           </div>
         </div>
       </div>

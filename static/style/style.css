@@ -60,7 +60,7 @@ body {
   font-size: 12px;
   display: flex;
   width: 100%;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
 }
 .logined-site-button {
@@ -72,7 +72,7 @@ body {
   color: black;
   background-color: #c7c5c5;
   text-decoration: none;
-  margin: 0px 7px;
+  /* margin: 0px 7px; */
   padding: 5px 8px;
   font-weight: 700;
   text-align: center;
@@ -104,6 +104,11 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+.main-nav-date {
+  font-size: 14px;
+  font-weight: 400;
+  color: #6c757d;
 }
 .date-time {
   font-size: 12px;
@@ -145,6 +150,7 @@ body {
   padding-bottom: 40px;
 }
 .section-title {
+  margin-top: 10px;
   margin-bottom: 8px;
   display: flex;
   align-items: center;
@@ -254,7 +260,7 @@ body {
 }
 .hori-card {
   border: none !important;
-  height: 149px;
+  height: 30%;
 }
 .hori-card-row {
   height: 100%;
@@ -467,6 +473,9 @@ body {
   font-size: 18px;
   font-weight: 700 !important;
 }
+.news-portal-name {
+  font-style: italic;
+}
 .section-3-card-overlay-tiltle:hover {
   color: #ffffff;
 }
@@ -633,10 +642,11 @@ body {
 
 /* login page css  */
 .login-page-container {
-  margin-top: 50px;
+  margin-top: 40px;
 }
 .login-form-colu {
   background-color: var(--body-background);
+  margin-bottom: 40px;
 }
 
 .login-form-div {
@@ -682,10 +692,14 @@ body {
 .button-div {
   display: flex;
   justify-content: center;
+  font-weight: 300;
+  font-size: 18px;
+  color: #4979f2;
 }
 .login-page-btn {
   margin-top: 10px;
   background-color: #1170b8 !important;
+  font-size: 20px;
 }
 .link {
   display: flex;
@@ -728,6 +742,13 @@ body {
   padding: 0 10px;
   overflow-y: scroll;
   max-height: 390px;
+}
+
+.error-msg {
+  color: red;
+  font-weight: 200;
+  font-size: 18px;
+  text-align: center;
 }
 
 /* register page css  */
