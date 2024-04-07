@@ -23,6 +23,8 @@ def scrape(request):
     urls = [
         "https://english.onlinekhabar.com/feed/",
         "https://enewspolar.com/feed/",
+        "https://techspecsnepal.com/feed/",
+        "https://www.prasashan.com/category/english/feed/",
     ]
     
 
@@ -52,6 +54,8 @@ def scrape(request):
                 soup = BSoup(content, 'html.parser')
                 img_tag = soup.find('img')
                 img_src = img_tag.get('src')
+
+
             except:
                 img_src = None
 
