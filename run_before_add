@@ -1,5 +1,12 @@
 #/bin/bash
 for python_file in $(ls news/*.py)
 do
+    echo "############################"
+    echo "Ordering imports in python file: ${python_file}"
     reorder-python-imports ${python_file}
 done
+
+echo "############################"
+echo "Formatting the files"
+ruff format .
+ruff --fix news/
