@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 
 import requests
@@ -10,6 +11,9 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import normalize
 
 from .models import Headline
+
+
+logger = logging.getLogger(__name__)
 
 
 def get_similar_news(news_id):
@@ -66,82 +70,90 @@ def scrape_news():
     ]
 
     for feed_url in feed_url_list:
-        response = requests.get(feed_url)
-        content = response.content
-        data_dict = xmltodict.parse(content)
+        logger.info(f"Fetching news from: {feed_url}")
+        try:
+            response = requests.get(feed_url)
+            content = response.content
+            data_dict = xmltodict.parse(content)
 
-        news_items = data_dict.get("rss", {}).get("channel", {}).get("item")
-        for news in news_items:
-            title = news["title"].strip("'\"`")
+            news_items = data_dict.get("rss", {}).get("channel", {}).get("item")
+            for news in news_items:
+                title = news["title"].strip("'\"`")
 
-            # Get Description Text
-            desc = news["description"]
-            soup_desc = BSoup(desc, "html.parser")
-            desc = soup_desc.get_text().strip("'\"`")
-            news_source = (
-                feed_url.replace("https://", "")
-                .replace(".com/feed/", "")
-                .replace("english.", "")
-                .replace("www.", "")
-                .replace(".com/category/english/feed/", "")
-                .replace("/feed", "")
-                .replace(".com", "")
-                .replace("en.", "")
-            )
+                # Get Description Text
+                desc = news["description"]
+                soup_desc = BSoup(desc, "html.parser")
+                desc = soup_desc.get_text().strip("'\"`")
+                news_source = (
+                    feed_url.replace("https://", "")
+                    .replace(".com/feed/", "")
+                    .replace("english.", "")
+                    .replace("www.", "")
+                    .replace(".com/category/english/feed/", "")
+                    .replace("/feed", "")
+                    .replace(".com", "")
+                    .replace("en.", "")
+                )
 
-            url = news["link"]
-            pub_date = news["pubDate"]
-            pub_date_format = datetime.strptime(pub_date, "%a, %d %b %Y %H:%M:%S %z")
+                url = news["link"]
+                pub_date = news["pubDate"]
+                pub_date_format = datetime.strptime(
+                    pub_date, "%a, %d %b %Y %H:%M:%S %z"
+                )
 
-            try:
-                # For onlinekhabar, newspolar, techkajak
-                if feed_url in (
-                    "https://english.onlinekhabar.com/feed/",
-                    "https://enewspolar.com/feed/",
-                    "https://techspecsnepal.com/feed/",
-                ):
-                    content = news.get("content:encoded")
-                    soup = BSoup(content, "html.parser")
-                    img_tag = soup.find("img")
-                    img_src = img_tag.get("src")
+                try:
+                    # For onlinekhabar, newspolar, techkajak
+                    if feed_url in (
+                        "https://english.onlinekhabar.com/feed/",
+                        "https://enewspolar.com/feed/",
+                        "https://techspecsnepal.com/feed/",
+                    ):
+                        content = news.get("content:encoded")
+                        soup = BSoup(content, "html.parser")
+                        img_tag = soup.find("img")
+                        img_src = img_tag.get("src")
 
-                elif feed_url in (
-                    "https://techmandu.com/feed/",
-                    "https://www.prasashan.com/category/english/feed/",
-                ):
+                    elif feed_url in (
+                        "https://techmandu.com/feed/",
+                        "https://www.prasashan.com/category/english/feed/",
+                    ):
+                        news_resp = requests.get(url)
+                        img_soup = BSoup(news_resp.content, "html.parser")
+                        img_src = img_soup.find("figure").find("img")["src"]
+
+                    # For Seto Pati and Ratopati
+                    if feed_url in (
+                        "https://english.ratopati.com/feed",
+                        "https://en.setopati.com/feed",
+                    ):
+                        class_name = "featured-images"
+                    elif feed_url == "https://english.nepalpress.com/feed/":
+                        class_name = "featured-image"
+                    elif feed_url == "https://english.aarthiknews.com/feed":
+                        class_name = "td-post-featured-image"
+
                     news_resp = requests.get(url)
                     img_soup = BSoup(news_resp.content, "html.parser")
-                    img_src = img_soup.find("figure").find("img")["src"]
+                    img_src = img_soup.find("div", class_=class_name).find("img")["src"]
 
-                # For Seto Pati and Ratopati
-                if feed_url in (
-                    "https://english.ratopati.com/feed",
-                    "https://en.setopati.com/feed",
-                ):
-                    class_name = "featured-images"
-                elif feed_url == "https://english.nepalpress.com/feed/":
-                    class_name = "featured-image"
-                elif feed_url == "https://english.aarthiknews.com/feed":
-                    class_name = "td-post-featured-image"
+                except Exception:
+                    img_src = None
 
-                news_resp = requests.get(url)
-                img_soup = BSoup(news_resp.content, "html.parser")
-                img_src = img_soup.find("div", class_=class_name).find("img")["src"]
+                if not img_src:
+                    continue
 
-            except Exception:
-                img_src = None
-
-            if not img_src:
-                continue
-
-            news_obj = Headline.objects.filter(url=url)
-            if not news_obj.exists():
-                head_line_obj = Headline(
-                    title=title,
-                    description=desc,
-                    url=url,
-                    image=img_src,
-                    pub_date=pub_date_format,
-                    news_source=news_source,
-                )
-                head_line_obj.save()
+                news_obj = Headline.objects.filter(url=url)
+                if not news_obj.exists():
+                    head_line_obj = Headline(
+                        title=title,
+                        description=desc,
+                        url=url,
+                        image=img_src,
+                        pub_date=pub_date_format,
+                        news_source=news_source,
+                    )
+                    head_line_obj.save()
+        except Exception:
+            logger.error(f"Error fetching data from {feed_url}")
+            logger.error(Exception)
+            continue
