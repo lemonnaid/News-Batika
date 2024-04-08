@@ -41,13 +41,20 @@
               ></a>
             </div>
             <div class="site-button">
-              {% if authenticated %}
-              <a href="{% url 'logout' %}" role="button" class="login-btn" >LOGOUT</a>
+              {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}" role="button" class="login-btn">LOGOUT</a>
               {% else %}
-              <a href="{% url "login" %}" role="button" class="login-btn" >LOGIN</a>
-              <a href="{% url "register" %}" role="button" class="subscribe-btn">REGISTER</a>
+                <a href="{% url 'login' %}" role="button" class="login-btn">LOGIN</a>
+                <a href="{% url 'register' %}" role="button" class="subscribe-btn">REGISTER</a>
               {% endif %}
-              <a href="{% url 'scrape' %}" role="button" class="subscribe-btn">FETCH NEWS</a>
+              {% if user.is_authenticated and user.is_staff %}
+                 <a href="{% url 'scrape' %}" role="button" class="subscribe-btn">FETCH NEWS</a>
+              {% endif %}
+
+              
+              
+
+                
             </div>
           </div>
         </div>
