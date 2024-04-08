@@ -41,9 +41,7 @@ def get_similar_news(news_id):
     current_article = normalized_features[current_article_index, :]
 
     # Calculate cosine similarities
-    similarities = cosine_similarity(
-        normalized_features, current_article.reshape(1, -1)
-    )
+    similarities = cosine_similarity(normalized_features[-1], normalized_features[:-1]).flatten()
 
     # Get indices of similar articles (excluding the clicked article itself)
     similar_article_indices = similarities.flatten().argsort()
