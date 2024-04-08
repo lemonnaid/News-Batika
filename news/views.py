@@ -95,7 +95,8 @@ def user_logout(request):
 
 
 def get_similar_news(request, news_id):
-    similar_news = utils.get_similar_news(news_id)
+    user_input = "i love apple"
+    similar_news = utils.get_similar_news(user_input)
     return HttpResponse(f"<h1>{similar_news}</h1>")
     similar_news = ["news_1", "news_2"]
     return JsonResponse(similar_news, safe=False)

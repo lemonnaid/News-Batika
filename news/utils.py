@@ -5,11 +5,8 @@ import requests
 import xmltodict
 from background_task import background
 from bs4 import BeautifulSoup as BSoup
-from sklearn.decomposition import NMF
-from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS as sklearn_stop_words
-from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.preprocessing import normalize
 
 from .models import Headline
 
@@ -18,41 +15,72 @@ logger = logging.getLogger(__name__)
 
 
 def get_similar_news(news_id):
-    # Input and output data
-    articles = Headline.objects.all()
-    article_titles = [article.description for article in articles]
-    article_link = [article.url for article in articles]
+    data_list = [
+        "apple is fruit.",
+        "apple are apple",
+        "i love eating",
+        "apple is love",
+        "messi scored goal",
+        "war is to be stopped",
+        "apple day keep doctor away",
+    ]
 
-    article_read = Headline.objects.get(id=news_id).description
-    article_url = Headline.objects.get(id=news_id).url
+    # Add user input to data list
+    data_list.append(news_id)
 
-    custom_stop_words = {"OnlineKhabar", "English", "News", "Enewspolar"}
-    all_stop_words = custom_stop_words.union(sklearn_stop_words)
-    tfidf_vectorizer = TfidfVectorizer(
-        max_df=0.95, min_df=2, stop_words=list(all_stop_words)
+    # Vectorize the data
+    vectorizer = CountVectorizer().fit_transform(data_list)
+
+    # Calculate cosine similarity
+    cosine_similarities = cosine_similarity(vectorizer[-1], vectorizer[:-1]).flatten()
+
+    # Sort sentences based on similarity scores
+    sorted_sentences = sorted(
+        zip(data_list[:-1], cosine_similarities), key=lambda x: x[1], reverse=True
     )
-    tfidf_features = tfidf_vectorizer.fit_transform(article_titles)
 
-    nmf = NMF(n_components=6)
-    nmf_features = nmf.fit_transform(tfidf_features)
-    normalized_features = normalize(nmf_features)
+    result_similarity = [
+        f"{sentence}: {similarity}" for sentence, similarity in sorted_sentences
+    ]
+    return f"User Input: {news_id}<br><br>Similar News:<br>" + "<br>".join(
+        result_similarity
+    )
 
-    current_article_index = article_titles.index(article_read)
-    current_article = normalized_features[current_article_index, :]
+    # Input and output data
+    # articles = Headline.objects.all()
+    # article_titles = [article.description for article in articles]
+    # article_link = [article.url for article in articles]
 
-    # Calculate cosine similarities
-    similarities = cosine_similarity(normalized_features[-1], normalized_features[:-1]).flatten()
+    # article_read = Headline.objects.get(id=news_id).description
+    # article_url = Headline.objects.get(id=news_id).url
 
-    # Get indices of similar articles (excluding the clicked article itself)
-    similar_article_indices = similarities.flatten().argsort()
+    # custom_stop_words = {"OnlineKhabar", "English", "News", "Enewspolar"}
+    # all_stop_words = custom_stop_words.union(sklearn_stop_words)
+    # tfidf_vectorizer = TfidfVectorizer(
+    #     max_df=0.95, min_df=2, stop_words=list(all_stop_words)
+    # )
+    # tfidf_features = tfidf_vectorizer.fit_transform(article_titles)
 
-    recommended_article = article_titles[similar_article_indices[0]]
-    recommended_url = article_link[similar_article_indices[0]]
+    # nmf = NMF(n_components=6)
+    # nmf_features = nmf.fit_transform(tfidf_features)
+    # normalized_features = normalize(nmf_features)
 
-    return f"""<h1>Article Read:</h1><h2>{article_read}<a href='{article_url}' target="_blank">{article_url}</a></h2><br><br><h1>Article Recommend: </h1><h2>{recommended_article}<a href='{recommended_url}' target="_blank">{recommended_url}</a></h2><br><br>
-    <h2>Similarities</h2><p>{similarities}</p>
-    <h2>Similarity index</h2><p>{similar_article_indices}</p>"""
-    return f"Given Article: {article_titles[clicked_article_index]}<br><br>Recommended Article: {recommended_article}"
+    # current_article_index = article_titles.index(article_read)
+    # current_article = normalized_features[current_article_index, :]
+
+    # # Calculate cosine similarities
+    # similarities = cosine_similarity(normalized_features[-1], normalized_features[:-1]).flatten()
+
+    # # Get indices of similar articles (excluding the clicked article itself)
+    # similar_article_indices = similarities.flatten().argsort()
+
+    # recommended_article = article_titles[similar_article_indices[0]]
+    # recommended_url = article_link[similar_article_indices[0]]
+
+    # return f"""<h1>Article Read:</h1><h2>{article_read}<a href='{article_url}' target="_blank">{article_url}</a></h2><br><br><h1>Article Recommend: </h1><h2>{recommended_article}<a href='{recommended_url}' target="_blank">{recommended_url}</a></h2><br><br>
+    # <h2>Similarities</h2><p>{similarities}</p>
+    # <h2>Similarity index</h2><p>{similar_article_indices}</p>"""
+    # return f"Given Article: {article_titles[clicked_article_index]}<br><br>Recommended Article: {recommended_article}"
 
 
 @background(schedule=5)

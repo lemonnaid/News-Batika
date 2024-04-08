@@ -2,7 +2,6 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import Permission
 from django.db import models
-from django.conf import settings
 
 
 class Headline(models.Model):
@@ -45,16 +44,9 @@ class CustomUser(AbstractUser):
     )
 
 
-
-
-
 class news_read(models.Model):
     user = models.CharField(max_length=100, null=True)
-    articles_read = models.ManyToManyField('Headline')
-    
-    
+    articles_read = models.ManyToManyField("Headline")
 
     def __str__(self):
         return f"{self.user.username} - {self.articles_read.count()} articles read"
-
-
