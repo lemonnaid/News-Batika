@@ -3,6 +3,7 @@ from datetime import datetime
 
 import requests
 import xmltodict
+from background_task import background
 from bs4 import BeautifulSoup as BSoup
 from sklearn.decomposition import NMF
 from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS as sklearn_stop_words
@@ -56,6 +57,7 @@ def get_similar_news(news_id):
     return f"Given Article: {article_titles[clicked_article_index]}<br><br>Recommended Article: {recommended_article}"
 
 
+@background(schedule=5)
 def scrape_news():
     feed_url_list = [
         "https://english.onlinekhabar.com/feed/",
@@ -157,3 +159,4 @@ def scrape_news():
             logger.error(f"Error fetching data from {feed_url}")
             logger.error(Exception)
             continue
+    logger.info("Fetching news completed")
