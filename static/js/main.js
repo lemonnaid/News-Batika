@@ -64,18 +64,36 @@ function compare_passwords() {
   return true;
 }
 
+//Search box field part of code
+
+function toggleSearch() {
+  let searchField = document.getElementById("searchField");
+  if (searchField.style.display === "none") {
+    searchField.style.display = "inline-block";
+    searchField.focus();
+  } else {
+    searchField.style.display = "none";
+  }
+}
 
 function open_link_and_get_similar_news(redirect_url, news_id, authenticated) {
   // Open a new window with the specified redirect URL
   window.open(redirect_url, "_blank");
 
-  if (authenticated){
-   window.location.href=`https://localhost/get_similar_news/${news_id}`
+  if (authenticated == "True") {
+    console.log("Getting similar news");
+    window.location.href = `http://localhost:8000/similar_news/${news_id}`;
   }
+}
 
-};
+function search_news() {
+  var search_text = document.getElementById("searchField").value;
+  if (search_text) {
+    console.log(search_text);
+    window.location.href = `http://localhost:8000/search/${search_text}`;
+  }
+}
 
-
-
-<a href=javascript:void(0) onclick="open_link_and_get_similar_news(redirect_url='https://google.com', news_id=2, authenticated=true)"><h1>Click Me</h1></a>
-
+{
+  /* <a href=javascript:void(0) onclick="open_link_and_get_similar_news(redirect_url='https://google.com', news_id=2, authenticated=true)"><h1>Click Me</h1></a> */
+}

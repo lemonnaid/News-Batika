@@ -22,7 +22,8 @@
           <div class="row">
             <div class="col-md-6 mb-4">
               <div class="card section-3-hero-card">
-                <a class="section-3-card-overlay-tiltle" target="_blank" href="{{head.url}}">
+                <a class="section-3-card-overlay-tiltle" href=javascript:void(0)
+                onclick="open_link_and_get_similar_news('{{head.url}}', {{head.id}}, '{{authenticated}}')">
                 {% if head.image %}
                   <img src="{{head.image}}" class="card-img-top section-3-hero-card-image" alt="..." />
                 {% else %}
@@ -30,10 +31,11 @@
                 {% endif %}
                 <div class="card-body hero-card-body section-3-hero-card-body">
                   <h5 class="card-title section-3-hero-card-title">
-                    <a href={{head.url}} target="_blank"><p class="card-text hero-news-heading">{{head.title}}</p></a>
+                    <a  href=javascript:void(0)
+                    onclick="open_link_and_get_similar_news('{{head.url}}', {{head.id}}, '{{authenticated}}')"><p class="card-text hero-news-heading">{{head.title}}</p></a>
                   </h5>
                   <p class="card-text">
-                    <a class="section-3-card-overlay-tiltle news-portal-name " target="_blank" href="{{news.url}}">{{head.news_source}}</a>
+                    <a class="section-3-card-overlay-tiltle npn-text-color news-portal-name " target="_blank" href="{{news.url}}">{{head.news_source}}</a>
 
                   </p>
                   <p class="card-text">
@@ -53,17 +55,19 @@
                   <div class="row hori-card-row g-0">
                     <div class="col-md-8 right-hori-card">
                       <div class="card-body hori-card-body">
-                        <h5 class="card-title">
-                          <a class="hori-card-title" target="_blank" href="{{n.url}}">{{n.title}}</a>
+                        <h5 class="card-title">                         
+                          <a class="hori-card-title" href=javascript:void(0) 
+                          onclick="open_link_and_get_similar_news('{{n.url}}', {{n.id}}, '{{authenticated}}')">{{n.title}}</a>
                         </h5>
-                        <a class="section-3-card-overlay-tiltle news-portal-name " target="_blank" href="{{news.url}}">{{n.news_source}}</a>
+                        <a class="section-3-card-overlay-tiltle npn-text-color news-portal-name " target="_blank" href="{{news.url}}">{{n.news_source}}</a>
                         <p class="card-text">
                           <small class="text-muted">{{n.pub_date|date:"d F, Y"}}</small>
                         </p>
                       </div>
                     </div>
                     <div class="col-md-4">
-                      <a class="section-3-card-overlay-tiltle" target="_blank" href="{{n.url}}">
+                      <a class="section-3-card-overlay-tiltle" href=javascript:void(0)
+                      onclick="open_link_and_get_similar_news('{{n.url}}', {{n.id}}, '{{authenticated}}')">
                       {% if n.image %}
                         <img src="{{n.image}}" class="img-fluid hori-card-img" alt="..." />
                       {% else %}
@@ -81,18 +85,19 @@
             {% for news in latest_all_news %}
               <div class="col-md-3">
                 <div class="card section-3-card-overlay">
-                  <a class="section-3-card-overlay-tiltle" target="_blank" href="{{news.url}}">
-                  <img src="{{news.image}}" class="card-img section-3-card-img-overlay" alt="..." />
-                  <div class="card-img-overlay card-img-overlay-section-3">
-                    <h5 class="card-title">
-                      <a class="section-3-card-overlay-tiltle news-heading" target="_blank" href="{{ news.url }}">{{ news.title|truncatechars:40 }}</a>
-                    </h5>
-                    <a class="section-3-card-overlay-tiltle news-portal-name " target="_blank" href="{{news.url}}">{{news.news_source}}</a>
-                    <p class="card-text">
-                      <small class="text-muted-overlay">{{news.pub_date|date:"d F, Y"}}</small>
-                    </p>
-                  </div>
-                </a>
+                  <a class="section-3-card-overlay-tiltle"  href=javascript:void(0)
+                    onclick="open_link_and_get_similar_news('{{news.url}}', {{news.id}}, '{{authenticated}}')">
+                    <img src="{{news.image}}" class="card-img section-3-card-img-overlay" alt="..." />
+                    <div class="card-img-overlay card-img-overlay-section-3">
+                      <h5 class="card-title">
+                        <a class="section-3-card-overlay-tiltle news-heading" target="_blank" href="{{ news.url }}">{{ news.title|truncatechars:40 }}</a>
+                      </h5>
+                      <a class="section-3-card-overlay-tiltle news-portal-name " target="_blank" href="{{news.url}}">{{news.news_source}}</a>
+                      <p class="card-text">
+                        <small class="text-muted-overlay">{{news.pub_date|date:"d F, Y"}}</small>
+                      </p>
+                    </div>
+                  </a>
                 </div>
               </div>
             {% endfor %}
