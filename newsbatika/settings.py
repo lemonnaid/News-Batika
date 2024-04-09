@@ -38,8 +38,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # Installed App
-    "background_task",
     # My App
     "news",
 ]

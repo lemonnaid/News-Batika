@@ -2,16 +2,12 @@ from datetime import datetime
 
 from django.contrib import auth
 from django.contrib.auth import logout
-from django.http import HttpResponse
-from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
 
 from news import utils
 from news.models import CustomUser
 from news.models import Headline
-# import nltk
-# from nltk.tokenize import word_tokenize
 
 
 def scrape(request):
@@ -20,9 +16,9 @@ def scrape(request):
 
 
 def index(request):
-    random_three = Headline.objects.order_by("-pub_date")[1:4]
-    latest_all_news = Headline.objects.order_by("-pub_date")[4:]
-    latest_news = Headline.objects.order_by("-pub_date").first()
+    random_three = Headline.objects.order_by("-id")[1:4]
+    latest_all_news = Headline.objects.order_by("-id")[4:]
+    latest_news = Headline.objects.order_by("-id").first()
 
     clean_text = "No Data. Please Click Fetch News Above"
     if latest_news:
@@ -96,6 +92,19 @@ def user_logout(request):
 
 def get_similar_news(request, news_id):
     similar_news = utils.get_similar_news(news_id)
-    return HttpResponse(f"<h1>{similar_news}</h1>")
-    similar_news = ["news_1", "news_2"]
-    return JsonResponse(similar_news, safe=False)
+    random_three = similar_news[1:4]
+    latest_news = similar_news[1]
+    other_similar_news = similar_news[4:]
+    clean_text = "No Data. Please Click Fetch News Above"
+    if latest_news:
+        clean_text = latest_news.description
+    context = {
+        "head": latest_news,
+        "random_three": random_three,
+        "latest_all_news": other_similar_news,
+        "clean_text": clean_text,
+        "date": datetime.now(),
+        "authenticated": request.user.is_authenticated,
+    }
+
+    return render(request, "news/index.html", context)

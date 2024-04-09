@@ -3,13 +3,9 @@ from datetime import datetime
 
 import requests
 import xmltodict
-from background_task import background
 from bs4 import BeautifulSoup as BSoup
-from sklearn.decomposition import NMF
-from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS as sklearn_stop_words
-from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.preprocessing import normalize
 
 from .models import Headline
 
@@ -18,44 +14,36 @@ logger = logging.getLogger(__name__)
 
 
 def get_similar_news(news_id):
-    # Input and output data
-    articles = Headline.objects.all()
-    article_titles = [article.description for article in articles]
-    article_link = [article.url for article in articles]
+    # Get all headlines excluding the user's news
+    headlines = Headline.objects.exclude(id=news_id)
 
-    article_read = Headline.objects.get(id=news_id).description
-    article_url = Headline.objects.get(id=news_id).url
+    # Get all news descriptions
+    descriptions = [headline.description for headline in headlines]
 
-    custom_stop_words = {"OnlineKhabar", "English", "News", "Enewspolar"}
-    all_stop_words = custom_stop_words.union(sklearn_stop_words)
-    tfidf_vectorizer = TfidfVectorizer(
-        max_df=0.95, min_df=2, stop_words=list(all_stop_words)
+    # Get the user's news description
+    user_news = Headline.objects.get(id=news_id)
+    user_description = user_news.description
+
+    # Add the user's news description to the list
+    descriptions.append(user_description)
+
+    # Vectorize the data
+    vectorizer = CountVectorizer().fit_transform(descriptions)
+
+    # Calculate cosine similarity
+    cosine_similarities = cosine_similarity(vectorizer[-1], vectorizer[:-1]).flatten()
+
+    # Sort indices based on similarity scores
+    sorted_indices = sorted(
+        range(len(cosine_similarities)),
+        key=lambda x: cosine_similarities[x],
+        reverse=True,
     )
-    tfidf_features = tfidf_vectorizer.fit_transform(article_titles)
 
-    nmf = NMF(n_components=6)
-    nmf_features = nmf.fit_transform(tfidf_features)
-    normalized_features = normalize(nmf_features)
-
-    current_article_index = article_titles.index(article_read)
-    current_article = normalized_features[current_article_index, :]
-
-    # Calculate cosine similarities
-    similarities = cosine_similarity(normalized_features[-1], normalized_features[:-1]).flatten()
-
-    # Get indices of similar articles (excluding the clicked article itself)
-    similar_article_indices = similarities.flatten().argsort()
-
-    recommended_article = article_titles[similar_article_indices[0]]
-    recommended_url = article_link[similar_article_indices[0]]
-
-    return f"""<h1>Article Read:</h1><h2>{article_read}<a href='{article_url}' target="_blank">{article_url}</a></h2><br><br><h1>Article Recommend: </h1><h2>{recommended_article}<a href='{recommended_url}' target="_blank">{recommended_url}</a></h2><br><br>
-    <h2>Similarities</h2><p>{similarities}</p>
-    <h2>Similarity index</h2><p>{similar_article_indices}</p>"""
-    return f"Given Article: {article_titles[clicked_article_index]}<br><br>Recommended Article: {recommended_article}"
+    similar_news_list = [headlines[i] for i in sorted_indices]
+    return similar_news_list
 
 
-@background(schedule=5)
 def scrape_news():
     feed_url_list = [
         "https://english.onlinekhabar.com/feed/",
@@ -82,6 +70,10 @@ def scrape_news():
 
                 # Get Description Text
                 desc = news["description"]
+                
+                if not desc:
+                    continue
+
                 soup_desc = BSoup(desc, "html.parser")
                 desc = soup_desc.get_text().strip("'\"`")
                 news_source = (
@@ -153,8 +145,7 @@ def scrape_news():
                         news_source=news_source,
                     )
                     head_line_obj.save()
-        except Exception:
-            logger.error(f"Error fetching data from {feed_url}")
-            logger.error(Exception)
+        except Exception as e:
+            logger.exception(f"Error fetching data from {feed_url}: {e}")
             continue
     logger.info("Fetching news completed")
