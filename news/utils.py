@@ -70,6 +70,10 @@ def scrape_news():
 
                 # Get Description Text
                 desc = news["description"]
+                
+                if not desc:
+                    continue
+
                 soup_desc = BSoup(desc, "html.parser")
                 desc = soup_desc.get_text().strip("'\"`")
                 news_source = (
@@ -141,8 +145,7 @@ def scrape_news():
                         news_source=news_source,
                     )
                     head_line_obj.save()
-        except Exception:
-            logger.error(f"Error fetching data from {feed_url}")
-            logger.error(Exception)
+        except Exception as e:
+            logger.exception(f"Error fetching data from {feed_url}: {e}")
             continue
     logger.info("Fetching news completed")
