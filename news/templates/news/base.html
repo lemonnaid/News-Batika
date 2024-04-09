@@ -42,6 +42,7 @@
             </div>
             <div class="site-button">
               {% if user.is_authenticated %}
+                <div class="login-btn" role="button">{{user.username}}</div>
                 <a href="{% url 'logout' %}" role="button" class="login-btn">LOGOUT</a>
               {% else %}
                 <a href="{% url 'login' %}" role="button" class="login-btn">LOGIN</a>
