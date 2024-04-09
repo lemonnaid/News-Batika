@@ -12,9 +12,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
     <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@200;300;400;500;600;700;800display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <link rel='stylesheet' type='text/css' media='screen' href='{% static "style/style.css" %}'>
+    <link rel="stylesheet" type="text/css" media="screen" href='{% static "style/style.css" %}' />
     <script src="{% static 'js/main.js' %}"></script>
-
   </head>
   <body>
     <header>
@@ -45,17 +44,11 @@
                 <div class="login-btn" role="button">{{user.username}}</div>
                 <a href="{% url 'logout' %}" role="button" class="login-btn">LOGOUT</a>
               {% else %}
-                <a href="{% url 'login' %}" role="button" class="login-btn">LOGIN</a>
-                <a href="{% url 'register' %}" role="button" class="subscribe-btn">REGISTER</a>
+              <a href="{% url 'login' %}" role="button" class="login-btn">LOGIN</a>
+              <a href="{% url 'register' %}" role="button" class="subscribe-btn">REGISTER</a>
+              {% endif %} {% if user.is_authenticated and user.is_staff %}
+              <a href="{% url 'scrape' %}" role="button" class="subscribe-btn">FETCH NEWS</a>
               {% endif %}
-              {% if user.is_authenticated and user.is_staff %}
-                 <a href="{% url 'scrape' %}" role="button" class="subscribe-btn">FETCH NEWS</a>
-              {% endif %}
-
-              
-              
-
-                
             </div>
           </div>
         </div>
@@ -80,25 +73,24 @@
                   <li><a class="dropdown-item" href="#">English to Nepali</a></li>
                 </ul>
               </li>
-              
             </ul>
           </div>
-          <div class="search-icon">
-            <i class="fa-solid fa-magnifying-glass"></i>
+          <div class="search-icon-div">
+            <input type="text" id="searchField" placeholder="Search..." style="display: none" />
+            <a href="#" onclick="toggleSearch()">
+              <i class="fa-solid search-icon fa-magnifying-glass" onclick="search_news()"></i>
+            </a>
           </div>
         </div>
       </section>
     </header>
-    {% block content %}
-    {% endblock content %}
+    {% block content %} {% endblock content %}
     <footer class="section-6">
       <div class="container footer-container">
         <div class="row">
           <div class="col-md-3 footer-column">
             <h5 class="footer-title">ABOUT US</h5>
-            <p class="footer-para">News aggregator system plays a crucial role in assisting users to stay updated with the
-              latest news across various topics and sources in today&#39;s rapidly evolving digital landscape.
-            </p>
+            <p class="footer-para">News aggregator system plays a crucial role in assisting users to stay updated with the latest news across various topics and sources in today&#39;s rapidly evolving digital landscape.</p>
             <div class="site-social-icons">
               <div class="footer-social-handles">
                 <a class="footer-nav-icon" href="#"
@@ -121,14 +113,15 @@
           </div>
           <div class="col-md-3 footer-column">
             <h5 class="footer-title">CONTACT US</h5>
-            <p class="mb-2 footer-para1"><i class="fa fa-map-marker-alt  me-3"></i>Kathmandu, Nepal</p>
+            <p class="mb-2 footer-para1"><i class="fa fa-map-marker-alt me-3"></i>Kathmandu, Nepal</p>
             <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>9867178418</p>
-            <p class="mb-2 footer-para3"><i class="fa fa-envelope  me-3"></i>aayushaghimire56@gmail.com</p>
+            <p class="mb-2 footer-para3"><i class="fa fa-envelope me-3"></i>aayushaghimire56@gmail.com</p>
           </div>
           <div class="col-md-6 google-map-div">
             <div class="ratio ratio-21x9">
-              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3974.058047322807!2d85.30971419829588!3d27.707626644522417!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb19077ca219b7%3A0xcada8fb23a81a282!2sPadmakanya%20Multiple%20Campus!5e0!3m2!1sen!2snp!4v1712523519541!5m2!1sen!2snp" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>            </div>
-          </div>         
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3974.058047322807!2d85.30971419829588!3d27.707626644522417!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb19077ca219b7%3A0xcada8fb23a81a282!2sPadmakanya%20Multiple%20Campus!5e0!3m2!1sen!2snp!4v1712523519541!5m2!1sen!2snp" width="600" height="450" style="border: 0" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

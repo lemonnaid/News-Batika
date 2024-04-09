@@ -115,3 +115,30 @@ def get_similar_news(request, news_id):
     }
 
     return render(request, "news/index.html", context)
+
+
+def search_news(request, search_text):
+    logger.info("Searching News")
+    searched_news = Headline.objects.filter(description__icontains=search_text).order_by("-id")
+    latest_news, latest_all_news,random_three = list(), list(), list()
+    if searched_news:
+        latest_news = searched_news[0]
+    if len(searched_news) > 3:
+        random_three = searched_news[1:4]
+    if len(searched_news) > 4:
+        latest_all_news = searched_news[4:]
+
+    clean_text = "No News Found. Please try searching other news"
+    if latest_news:
+        clean_text = latest_news.description
+
+    context = {
+        "head": latest_news,
+        "random_three": random_three,
+        "latest_all_news": latest_all_news,
+        "clean_text": clean_text,
+        "date": datetime.now(),
+        "authenticated": request.user.is_authenticated,
+    }
+
+    return render(request, "news/index.html", context)
