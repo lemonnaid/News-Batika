@@ -11,5 +11,5 @@ urlpatterns = [
     path(
         "similar_news/<int:news_id>/", views.get_similar_news, name="get_similar_news"
     ),
-    path("search/<str:search_text>", views.search_news, name="search_news")
+    path("search/<str:search_text>", views.search_news, name="search_news"),
 ]

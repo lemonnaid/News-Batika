@@ -5,7 +5,6 @@ import requests
 import xmltodict
 from bs4 import BeautifulSoup as BSoup
 
-
 from .models import Headline
 
 
@@ -16,10 +15,12 @@ import re
 import math
 from collections import Counter
 
+
 def clean_text(text):
     # Remove special characters and convert to lowercase
-    text = re.sub(r'[^a-zA-Z0-9\s]', '', text)
+    text = re.sub(r"[^a-zA-Z0-9\s]", "", text)
     return text.lower()
+
 
 def get_cosine_similarity(vec1, vec2):
     # Calculate the dot product
@@ -35,11 +36,13 @@ def get_cosine_similarity(vec1, vec2):
     else:
         return dot_product / (magnitude1 * magnitude2)
 
+
 def get_vector(text, vocab):
     # Create a vector representation of the text based on the vocabulary
     text_counter = Counter(text.split())
     vector = [text_counter[word] for word in vocab]
     return vector
+
 
 def get_similar_news(news_id):
     # Get all headlines excluding the user's news
@@ -66,15 +69,20 @@ def get_similar_news(news_id):
 
     # Calculate cosine similarity
     user_vector = vectors[-1]
-    similarities = [get_cosine_similarity(user_vector, vector) for vector in vectors[:-1]]
+    similarities = [
+        get_cosine_similarity(user_vector, vector) for vector in vectors[:-1]
+    ]
 
     # Sort indices based on similarity scores
-    sorted_indices = sorted(range(len(similarities)), key=lambda x: similarities[x], reverse=True)
+    sorted_indices = sorted(
+        range(len(similarities)), key=lambda x: similarities[x], reverse=True
+    )
 
     similar_news_list = [headlines[i] for i in sorted_indices]
     return similar_news_list
 
-#Using libary
+
+# Using libary
 
 # def get_similar_news(news_id):
 #     # Get all headlines excluding the user's news

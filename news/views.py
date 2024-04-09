@@ -96,7 +96,7 @@ def user_logout(request):
 def get_similar_news(request, news_id):
     if not request.user.is_authenticated:
         return redirect("login")
-    
+
     logger.info("Getting Similar News")
     similar_news = utils.get_similar_news(news_id)
     latest_news = similar_news[0]
@@ -119,8 +119,10 @@ def get_similar_news(request, news_id):
 
 def search_news(request, search_text):
     logger.info("Searching News")
-    searched_news = Headline.objects.filter(description__icontains=search_text).order_by("-id")
-    latest_news, latest_all_news,random_three = list(), list(), list()
+    searched_news = Headline.objects.filter(
+        description__icontains=search_text
+    ).order_by("-id")
+    latest_news, latest_all_news, random_three = list(), list(), list()
     if searched_news:
         latest_news = searched_news[0]
     if len(searched_news) > 3:
