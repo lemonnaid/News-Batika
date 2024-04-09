@@ -118,6 +118,9 @@ def get_similar_news(request, news_id):
 
 
 def search_news(request, search_text):
+    if not request.user.is_authenticated:
+        return redirect("login")
+
     logger.info("Searching News")
     searched_news = Headline.objects.filter(
         description__icontains=search_text

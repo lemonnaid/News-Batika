@@ -87,13 +87,10 @@ function open_link_and_get_similar_news(redirect_url, news_id, authenticated) {
 }
 
 function search_news() {
-  var search_text = document.getElementById("searchField").value;
+  let search_text = document.getElementById("searchField").value;
   if (search_text) {
     console.log(search_text);
     window.location.href = `http://localhost:8000/search/${search_text}`;
   }
 }
 
-{
-  /* <a href=javascript:void(0) onclick="open_link_and_get_similar_news(redirect_url='https://google.com', news_id=2, authenticated=true)"><h1>Click Me</h1></a> */
-}
