@@ -94,6 +94,9 @@ def user_logout(request):
 
 
 def get_similar_news(request, news_id):
+    if not request.user.is_authenticated:
+        return redirect("login")
+    
     logger.info("Getting Similar News")
     similar_news = utils.get_similar_news(news_id)
     latest_news = similar_news[0]
