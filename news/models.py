@@ -42,11 +42,3 @@ class CustomUser(AbstractUser):
         related_name="custom_user_set",
         related_query_name="user",
     )
-
-
-class news_read(models.Model):
-    user = models.CharField(max_length=100, null=True)
-    articles_read = models.ManyToManyField("Headline")
-
-    def __str__(self):
-        return f"{self.user.username} - {self.articles_read.count()} articles read"
