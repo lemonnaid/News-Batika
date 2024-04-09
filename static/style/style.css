@@ -60,9 +60,8 @@ body {
   font-size: 12px;
   display: flex;
   width: 100%;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
-  margin-left: 200px;
 }
 .logined-site-button {
   justify-content: center !important;
