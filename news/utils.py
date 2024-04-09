@@ -4,13 +4,42 @@ from datetime import datetime
 import requests
 import xmltodict
 from bs4 import BeautifulSoup as BSoup
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
 
 from .models import Headline
 
 
 logger = logging.getLogger(__name__)
+
+# scratch code
+import re
+from collections import Counter
+import math
+
+
+def tokenize(text):
+    # Tokenize text into words
+    return re.findall(r"\w+", text.lower())
+
+
+def get_cosine_similarity(vec1, vec2):
+    # Calculate cosine similarity between two vectors
+    intersection = set(vec1.keys()) & set(vec2.keys())
+    numerator = sum([vec1[x] * vec2[x] for x in intersection])
+
+    sum1 = sum([vec1[x] ** 2 for x in vec1.keys()])
+    sum2 = sum([vec2[x] ** 2 for x in vec2.keys()])
+    denominator = math.sqrt(sum1) * math.sqrt(sum2)
+
+    if not denominator:
+        return 0.0
+    else:
+        return float(numerator) / denominator
+
+
+def get_vector(text):
+    # Create a vector (dictionary) of word frequencies
+    words = tokenize(text)
+    return Counter(words)
 
 
 def get_similar_news(news_id):
@@ -24,24 +53,53 @@ def get_similar_news(news_id):
     user_news = Headline.objects.get(id=news_id)
     user_description = user_news.description
 
-    # Add the user's news description to the list
-    descriptions.append(user_description)
-
-    # Vectorize the data
-    vectorizer = CountVectorizer().fit_transform(descriptions)
+    # Create vectors for user's news description and other news descriptions
+    user_vector = get_vector(user_description)
+    vectors = [get_vector(desc) for desc in descriptions]
 
     # Calculate cosine similarity
-    cosine_similarities = cosine_similarity(vectorizer[-1], vectorizer[:-1]).flatten()
+    similarities = [get_cosine_similarity(user_vector, vector) for vector in vectors]
 
     # Sort indices based on similarity scores
     sorted_indices = sorted(
-        range(len(cosine_similarities)),
-        key=lambda x: cosine_similarities[x],
+        range(len(similarities)),
+        key=lambda x: similarities[x],
         reverse=True,
     )
 
     similar_news_list = [headlines[i] for i in sorted_indices]
     return similar_news_list
+
+
+# def get_similar_news(news_id):
+#     # Get all headlines excluding the user's news
+#     headlines = Headline.objects.exclude(id=news_id)
+
+#     # Get all news descriptions
+#     descriptions = [headline.description for headline in headlines]
+
+#     # Get the user's news description
+#     user_news = Headline.objects.get(id=news_id)
+#     user_description = user_news.description
+
+#     # Add the user's news description to the list
+#     descriptions.append(user_description)
+
+#     # Vectorize the data
+#     vectorizer = CountVectorizer().fit_transform(descriptions)
+
+#     # Calculate cosine similarity
+#     cosine_similarities = cosine_similarity(vectorizer[-1], vectorizer[:-1]).flatten()
+
+#     # Sort indices based on similarity scores
+#     sorted_indices = sorted(
+#         range(len(cosine_similarities)),
+#         key=lambda x: cosine_similarities[x],
+#         reverse=True,
+#     )
+
+#     similar_news_list = [headlines[i] for i in sorted_indices]
+#     return similar_news_list
 
 
 def scrape_news():
@@ -70,7 +128,7 @@ def scrape_news():
 
                 # Get Description Text
                 desc = news["description"]
-                
+
                 if not desc:
                     continue
 
