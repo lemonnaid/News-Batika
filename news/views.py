@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 
 from django.contrib import auth
@@ -8,9 +9,9 @@ from django.shortcuts import render
 from news import utils
 from news.models import CustomUser
 from news.models import Headline
-import logging
 
-logger = logging.getLogger('__main__')
+logger = logging.getLogger("__main__")
+
 
 def scrape(request):
     utils.scrape_news()
