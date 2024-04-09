@@ -65,20 +65,17 @@ function compare_passwords() {
 }
 
 
-function openNewsAndRefresh(newsId) {
-  // Open news source in new tab
-  // window.open("http://url-to-news-source.com", "_blank");
+function open_link_and_get_similar_news(redirect_url, news_id, authenticated) {
+  // Open a new window with the specified redirect URL
+  window.open(redirect_url, "_blank");
 
-  // Fetch similar news using AJAX
-  $.ajax({
-      url: `http://127.0.0.1:8000/similar_news/${newsId}/`,
-      type: 'GET',
-      success: function(data) {
-          // Update home news content with similar news
-          $('.home-news-container').html(data);
-      },
-      error: function(xhr, status, error) {
-          console.error('Failed to fetch similar news:', error);
-      }
-  });
-}
+  if (authenticated){
+   window.location.href=`https://localhost/get_similar_news/${news_id}`
+  }
+
+};
+
+
+
+<a href=javascript:void(0) onclick="open_link_and_get_similar_news(redirect_url='https://google.com', news_id=2, authenticated=true)"><h1>Click Me</h1></a>
+
