@@ -24,27 +24,28 @@
               <div class="card section-3-hero-card">
                 <a class="section-3-card-overlay-tiltle" href=javascript:void(0)
                 onclick="open_link_and_get_similar_news('{{head.url}}', {{head.id}}, '{{authenticated}}')">
-                {% if head.image %}
-                  <img src="{{head.image}}" class="card-img-top section-3-hero-card-image" alt="..." />
-                {% else %}
-                  <img src="{% static 'not_found.png' %}" class="card-img-top section-3-hero-card-image" alt="..." />
-                {% endif %}
-                <div class="card-body hero-card-body section-3-hero-card-body">
-                  <h5 class="card-title section-3-hero-card-title">
-                    <a  href=javascript:void(0)
-                    onclick="open_link_and_get_similar_news('{{head.url}}', {{head.id}}, '{{authenticated}}')"><p class="card-text hero-news-heading">{{head.title}}</p></a>
-                  </h5>
-                  <p class="card-text">
-                    <a class="section-3-card-overlay-tiltle npn-text-color news-portal-name " target="_blank" href="{{news.url}}">{{head.news_source}}</a>
+                  {% if head.image %}
+                    <img src="{{head.image}}" class="card-img-top section-3-hero-card-image" alt="..." />
+                  {% else %}
+                    <img src="{% static 'not_found.png' %}" class="card-img-top section-3-hero-card-image" alt="..." />
+                  {% endif %}
+                  <div class="card-body hero-card-body section-3-hero-card-body">
+                    <h5 class="card-title section-3-hero-card-title">
+                      <a  href=javascript:void(0)
+                      onclick="open_link_and_get_similar_news('{{head.url}}', {{head.id}}, '{{authenticated}}')"><p class="card-text hero-news-heading">{{head.title}}</p>
+                    </a>
+                    </h5>
+                    <p class="card-text">
+                      <a class="section-3-card-overlay-tiltle npn-text-color news-portal-name " target="_blank" href="{{news.url}}">{{head.news_source}}</a>
 
-                  </p>
-                  <p class="card-text">
+                    </p>
+                    <p class="card-text">
+                      
+                      <small class="text-muted">{{head.pub_date|date:"d F, Y"}}</small>
+                    </p>
+                    <p class="card-text section-3-hero-card-para">{{clean_text}}</p>
                     
-                    <small class="text-muted">{{head.pub_date|date:"d F, Y"}}</small>
-                  </p>
-                  <p class="card-text section-3-hero-card-para">{{clean_text}}</p>
-                  
-                </div>
+                  </div>
               </a>
               </div>
             </div>
@@ -90,7 +91,8 @@
                     <img src="{{news.image}}" class="card-img section-3-card-img-overlay" alt="..." />
                     <div class="card-img-overlay card-img-overlay-section-3">
                       <h5 class="card-title">
-                        <a class="section-3-card-overlay-tiltle news-heading" target="_blank" href="{{ news.url }}">{{ news.title|truncatechars:40 }}</a>
+                        <a class="section-3-card-overlay-tiltle news-heading"  href=javascript:void(0)
+                        onclick="open_link_and_get_similar_news('{{news.url}}', {{news.id}}, '{{authenticated}}')">{{ news.title|truncatechars:40 }}</a>
                       </h5>
                       <a class="section-3-card-overlay-tiltle news-portal-name " target="_blank" href="{{news.url}}">{{news.news_source}}</a>
                       <p class="card-text">
