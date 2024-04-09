@@ -91,7 +91,7 @@ def user_logout(request):
 
 
 def get_similar_news(request, news_id):
-    similar_news = utils.get_similar_news(230)
+    similar_news = utils.get_similar_news(news_id)
     random_three = similar_news[1:4]
     latest_news = similar_news[1]
     other_similar_news = similar_news[4:]

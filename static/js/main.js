@@ -63,3 +63,22 @@ function compare_passwords() {
   }
   return true;
 }
+
+
+function openNewsAndRefresh(newsId) {
+  // Open news source in new tab
+  // window.open("http://url-to-news-source.com", "_blank");
+
+  // Fetch similar news using AJAX
+  $.ajax({
+      url: `http://127.0.0.1:8000/similar_news/${newsId}/`,
+      type: 'GET',
+      success: function(data) {
+          // Update home news content with similar news
+          $('.home-news-container').html(data);
+      },
+      error: function(xhr, status, error) {
+          console.error('Failed to fetch similar news:', error);
+      }
+  });
+}
