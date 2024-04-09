@@ -33,9 +33,15 @@
                     <a href={{head.url}} target="_blank"><p class="card-text hero-news-heading">{{head.title}}</p></a>
                   </h5>
                   <p class="card-text">
+                    <a class="section-3-card-overlay-tiltle news-portal-name " target="_blank" href="{{news.url}}">{{head.news_source}}</a>
+
+                  </p>
+                  <p class="card-text">
+                    
                     <small class="text-muted">{{head.pub_date|date:"d F, Y"}}</small>
                   </p>
                   <p class="card-text section-3-hero-card-para">{{clean_text}}</p>
+                  
                 </div>
               </a>
               </div>
@@ -50,6 +56,7 @@
                         <h5 class="card-title">
                           <a class="hori-card-title" target="_blank" href="{{n.url}}">{{n.title}}</a>
                         </h5>
+                        <a class="section-3-card-overlay-tiltle news-portal-name " target="_blank" href="{{news.url}}">{{n.news_source}}</a>
                         <p class="card-text">
                           <small class="text-muted">{{n.pub_date|date:"d F, Y"}}</small>
                         </p>
