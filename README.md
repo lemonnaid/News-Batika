@@ -4,7 +4,7 @@ News Batika is a news aggregator system which scrapes news articles from various
 
 Our system uses cosine-similarity algorithm to recommend news articles based on the articles read/interacted by the users previously.
 
-<span style="color:red;">Final year project done by: Aayusha, Binda and Lalita.</span>
+_Final year project done by: Aayusha, Binda and Lalita._
 
  ![A screenshot of the project](./preview.png)
 
