@@ -72,7 +72,8 @@ body {
 }
 .subscribe-btn {
   color: rgb(255, 255, 255);
-  background-color: #ea3327;
+  background-color: #000000;
+  /* background-color: #ea3327; */
   text-decoration: none;
   padding: 5px 8px;
   font-weight: 700;
